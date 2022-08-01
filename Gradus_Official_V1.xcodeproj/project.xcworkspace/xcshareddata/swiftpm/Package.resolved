@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8dd85aee02e39dd280c75eef88ffdb86eed4b07b"
+      }
+    },
+    {
+      "identity" : "dropdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AssistoLab/DropDown",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2ab6f6ce19f0117d1a76ea043ef8f57722c65d16"
+      }
+    },
+    {
+      "identity" : "efautoscrolllabel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EFPrefix/EFAutoScrollLabel",
+      "state" : {
+        "revision" : "aa0b8204f4d146377cb5b84e0cfeb4c1cdb62587",
+        "version" : "5.1.2"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup",
+      "state" : {
+        "branch" : "master",
+        "revision" : "574006f80d7d0d919d0ca5b57f8e318f4c789334"
+      }
+    }
+  ],
+  "version" : 2
+}

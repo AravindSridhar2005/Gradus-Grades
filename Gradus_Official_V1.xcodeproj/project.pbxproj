@@ -1,0 +1,782 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4E0A4BBD2892EACA009E14D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BBC2892EACA009E14D5 /* AppDelegate.swift */; };
+		4E0A4BBF2892EACA009E14D5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BBE2892EACA009E14D5 /* SceneDelegate.swift */; };
+		4E0A4BC12892EACA009E14D5 /* gradesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BC02892EACA009E14D5 /* gradesVC.swift */; };
+		4E0A4BC42892EACA009E14D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E0A4BC22892EACA009E14D5 /* Main.storyboard */; };
+		4E0A4BC62892EACB009E14D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E0A4BC52892EACB009E14D5 /* Assets.xcassets */; };
+		4E0A4BC92892EACB009E14D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E0A4BC72892EACB009E14D5 /* LaunchScreen.storyboard */; };
+		4E0A4BD42892EACB009E14D5 /* Gradus_Official_V1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BD32892EACB009E14D5 /* Gradus_Official_V1Tests.swift */; };
+		4E0A4BDE2892EACB009E14D5 /* Gradus_Official_V1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BDD2892EACB009E14D5 /* Gradus_Official_V1UITests.swift */; };
+		4E0A4BE02892EACB009E14D5 /* Gradus_Official_V1UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BDF2892EACB009E14D5 /* Gradus_Official_V1UITestsLaunchTests.swift */; };
+		4E0A4BEE2892F403009E14D5 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 4E0A4BED2892F403009E14D5 /* SwiftSoup */; };
+		4E0A4BF02892F5C7009E14D5 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BEF2892F5C7009E14D5 /* Assignment.swift */; };
+		4E0A4BF42893010B009E14D5 /* DropDown in Frameworks */ = {isa = PBXBuildFile; productRef = 4E0A4BF32893010B009E14D5 /* DropDown */; };
+		4E0A4BF628930AC8009E14D5 /* gradesSpecficVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BF528930AC8009E14D5 /* gradesSpecficVC.swift */; };
+		4E0A4BF828930B25009E14D5 /* gradePopOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BF728930B25009E14D5 /* gradePopOverVC.swift */; };
+		4E0A4BFA289357CA009E14D5 /* transcriptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BF9289357CA009E14D5 /* transcriptVC.swift */; };
+		4E0A4BFC2893593A009E14D5 /* TranscriptYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4BFB2893593A009E14D5 /* TranscriptYear.swift */; };
+		4E0A4C0228935BF1009E14D5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A4C0128935BF1009E14D5 /* HomeViewController.swift */; };
+		4E0D9B0E2893742E00053723 /* transcriptSpecificVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B0D2893742E00053723 /* transcriptSpecificVC.swift */; };
+		4E0D9B1028942FEA00053723 /* reportCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B0F28942FEA00053723 /* reportCardVC.swift */; };
+		4E0D9B122894464F00053723 /* progressReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B112894464F00053723 /* progressReportVC.swift */; };
+		4E0D9B142894466800053723 /* BellScheduleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B132894466800053723 /* BellScheduleVC.swift */; };
+		4E0D9B162894468100053723 /* ContactTeachersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B152894468100053723 /* ContactTeachersVC.swift */; };
+		4E0D9B1828944FCE00053723 /* ReportCardObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B1728944FCE00053723 /* ReportCardObject.swift */; };
+		4E0D9B1A2894737800053723 /* reportCardPopOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B192894737800053723 /* reportCardPopOverVC.swift */; };
+		4E0D9B1C289494AA00053723 /* Teacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B1B289494AA00053723 /* Teacher.swift */; };
+		4E0D9B1E289586E800053723 /* ClassSpecifics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B1D289586E800053723 /* ClassSpecifics.swift */; };
+		4E0D9B20289598A800053723 /* schedulePopOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9B1F289598A800053723 /* schedulePopOverVC.swift */; };
+		4E0D9B232895A60D00053723 /* EFAutoScrollLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E0D9B222895A60D00053723 /* EFAutoScrollLabel */; };
+		4E87F45D2895DE57004BD3BA /* iprObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F45C2895DE57004BD3BA /* iprObject.swift */; };
+		4E87F45F2895E98C004BD3BA /* IPRPopOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F45E2895E98C004BD3BA /* IPRPopOverVC.swift */; };
+		4E87F4612896012C004BD3BA /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F4602896012C004BD3BA /* ProfileVC.swift */; };
+		4E87F463289605B6004BD3BA /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F462289605B6004BD3BA /* loginVC.swift */; };
+		4E87F466289606DE004BD3BA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4E87F465289606DE004BD3BA /* Alamofire */; };
+		4E87F46A28962401004BD3BA /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F46928962401004BD3BA /* TabBarVC.swift */; };
+		4E87F4AB2896EE64004BD3BA /* liveGPAVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87F4AA2896EE64004BD3BA /* liveGPAVC.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4E0A4BD02892EACB009E14D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E0A4BB12892EACA009E14D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E0A4BB82892EACA009E14D5;
+			remoteInfo = Gradus_Official_V1;
+		};
+		4E0A4BDA2892EACB009E14D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E0A4BB12892EACA009E14D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E0A4BB82892EACA009E14D5;
+			remoteInfo = Gradus_Official_V1;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4E0A4BB92892EACA009E14D5 /* Gradus_Official_V1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gradus_Official_V1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E0A4BBC2892EACA009E14D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4E0A4BBE2892EACA009E14D5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		4E0A4BC02892EACA009E14D5 /* gradesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gradesVC.swift; sourceTree = "<group>"; };
+		4E0A4BC32892EACA009E14D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4E0A4BC52892EACB009E14D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4E0A4BC82892EACB009E14D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4E0A4BCA2892EACB009E14D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E0A4BCF2892EACB009E14D5 /* Gradus_Official_V1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Gradus_Official_V1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E0A4BD32892EACB009E14D5 /* Gradus_Official_V1Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradus_Official_V1Tests.swift; sourceTree = "<group>"; };
+		4E0A4BD92892EACB009E14D5 /* Gradus_Official_V1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Gradus_Official_V1UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E0A4BDD2892EACB009E14D5 /* Gradus_Official_V1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradus_Official_V1UITests.swift; sourceTree = "<group>"; };
+		4E0A4BDF2892EACB009E14D5 /* Gradus_Official_V1UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradus_Official_V1UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4E0A4BEF2892F5C7009E14D5 /* Assignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Assignment.swift; path = ../../GradeEasy/Assignment.swift; sourceTree = "<group>"; };
+		4E0A4BF528930AC8009E14D5 /* gradesSpecficVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gradesSpecficVC.swift; sourceTree = "<group>"; };
+		4E0A4BF728930B25009E14D5 /* gradePopOverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gradePopOverVC.swift; sourceTree = "<group>"; };
+		4E0A4BF9289357CA009E14D5 /* transcriptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transcriptVC.swift; sourceTree = "<group>"; };
+		4E0A4BFB2893593A009E14D5 /* TranscriptYear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TranscriptYear.swift; path = ../../GradeEasy/TranscriptYear.swift; sourceTree = "<group>"; };
+		4E0A4C0128935BF1009E14D5 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4E0D9B0D2893742E00053723 /* transcriptSpecificVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transcriptSpecificVC.swift; sourceTree = "<group>"; };
+		4E0D9B0F28942FEA00053723 /* reportCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reportCardVC.swift; sourceTree = "<group>"; };
+		4E0D9B112894464F00053723 /* progressReportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = progressReportVC.swift; sourceTree = "<group>"; };
+		4E0D9B132894466800053723 /* BellScheduleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellScheduleVC.swift; sourceTree = "<group>"; };
+		4E0D9B152894468100053723 /* ContactTeachersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTeachersVC.swift; sourceTree = "<group>"; };
+		4E0D9B1728944FCE00053723 /* ReportCardObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportCardObject.swift; path = ../../GradeEasy/ReportCardObject.swift; sourceTree = "<group>"; };
+		4E0D9B192894737800053723 /* reportCardPopOverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reportCardPopOverVC.swift; sourceTree = "<group>"; };
+		4E0D9B1B289494AA00053723 /* Teacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Teacher.swift; path = ../../GradeEasy/Teacher.swift; sourceTree = "<group>"; };
+		4E0D9B1D289586E800053723 /* ClassSpecifics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassSpecifics.swift; sourceTree = "<group>"; };
+		4E0D9B1F289598A800053723 /* schedulePopOverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = schedulePopOverVC.swift; sourceTree = "<group>"; };
+		4E87F45C2895DE57004BD3BA /* iprObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iprObject.swift; path = ../../GradeEasy/iprObject.swift; sourceTree = "<group>"; };
+		4E87F45E2895E98C004BD3BA /* IPRPopOverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPRPopOverVC.swift; sourceTree = "<group>"; };
+		4E87F4602896012C004BD3BA /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		4E87F462289605B6004BD3BA /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
+		4E87F46928962401004BD3BA /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
+		4E87F4AA2896EE64004BD3BA /* liveGPAVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = liveGPAVC.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4E0A4BB62892EACA009E14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0D9B232895A60D00053723 /* EFAutoScrollLabel in Frameworks */,
+				4E87F466289606DE004BD3BA /* Alamofire in Frameworks */,
+				4E0A4BEE2892F403009E14D5 /* SwiftSoup in Frameworks */,
+				4E0A4BF42893010B009E14D5 /* DropDown in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BCC2892EACB009E14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BD62892EACB009E14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E0A4BB02892EACA009E14D5 = {
+			isa = PBXGroup;
+			children = (
+				4E0A4BBB2892EACA009E14D5 /* Gradus_Official_V1 */,
+				4E0A4BD22892EACB009E14D5 /* Gradus_Official_V1Tests */,
+				4E0A4BDC2892EACB009E14D5 /* Gradus_Official_V1UITests */,
+				4E0A4BBA2892EACA009E14D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4E0A4BBA2892EACA009E14D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E0A4BB92892EACA009E14D5 /* Gradus_Official_V1.app */,
+				4E0A4BCF2892EACB009E14D5 /* Gradus_Official_V1Tests.xctest */,
+				4E0A4BD92892EACB009E14D5 /* Gradus_Official_V1UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4E0A4BBB2892EACA009E14D5 /* Gradus_Official_V1 */ = {
+			isa = PBXGroup;
+			children = (
+				4E0A4BBC2892EACA009E14D5 /* AppDelegate.swift */,
+				4E0A4BBE2892EACA009E14D5 /* SceneDelegate.swift */,
+				4E0A4BC02892EACA009E14D5 /* gradesVC.swift */,
+				4E0A4BC22892EACA009E14D5 /* Main.storyboard */,
+				4E87F4AA2896EE64004BD3BA /* liveGPAVC.swift */,
+				4E87F46928962401004BD3BA /* TabBarVC.swift */,
+				4E87F462289605B6004BD3BA /* loginVC.swift */,
+				4E87F45E2895E98C004BD3BA /* IPRPopOverVC.swift */,
+				4E0D9B112894464F00053723 /* progressReportVC.swift */,
+				4E0D9B1F289598A800053723 /* schedulePopOverVC.swift */,
+				4E0D9B132894466800053723 /* BellScheduleVC.swift */,
+				4E0D9B192894737800053723 /* reportCardPopOverVC.swift */,
+				4E0D9B152894468100053723 /* ContactTeachersVC.swift */,
+				4E0D9B0F28942FEA00053723 /* reportCardVC.swift */,
+				4E0D9B1D289586E800053723 /* ClassSpecifics.swift */,
+				4E0A4C0128935BF1009E14D5 /* HomeViewController.swift */,
+				4E87F4602896012C004BD3BA /* ProfileVC.swift */,
+				4E0A4BF9289357CA009E14D5 /* transcriptVC.swift */,
+				4E0D9B0D2893742E00053723 /* transcriptSpecificVC.swift */,
+				4E0A4BF528930AC8009E14D5 /* gradesSpecficVC.swift */,
+				4E87F45C2895DE57004BD3BA /* iprObject.swift */,
+				4E0A4BF728930B25009E14D5 /* gradePopOverVC.swift */,
+				4E0A4BFB2893593A009E14D5 /* TranscriptYear.swift */,
+				4E0D9B1B289494AA00053723 /* Teacher.swift */,
+				4E0D9B1728944FCE00053723 /* ReportCardObject.swift */,
+				4E0A4BC52892EACB009E14D5 /* Assets.xcassets */,
+				4E0A4BC72892EACB009E14D5 /* LaunchScreen.storyboard */,
+				4E0A4BEF2892F5C7009E14D5 /* Assignment.swift */,
+				4E0A4BCA2892EACB009E14D5 /* Info.plist */,
+			);
+			path = Gradus_Official_V1;
+			sourceTree = "<group>";
+		};
+		4E0A4BD22892EACB009E14D5 /* Gradus_Official_V1Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4E0A4BD32892EACB009E14D5 /* Gradus_Official_V1Tests.swift */,
+			);
+			path = Gradus_Official_V1Tests;
+			sourceTree = "<group>";
+		};
+		4E0A4BDC2892EACB009E14D5 /* Gradus_Official_V1UITests */ = {
+			isa = PBXGroup;
+			children = (
+				4E0A4BDD2892EACB009E14D5 /* Gradus_Official_V1UITests.swift */,
+				4E0A4BDF2892EACB009E14D5 /* Gradus_Official_V1UITestsLaunchTests.swift */,
+			);
+			path = Gradus_Official_V1UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4E0A4BB82892EACA009E14D5 /* Gradus_Official_V1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E0A4BE32892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1" */;
+			buildPhases = (
+				4E0A4BB52892EACA009E14D5 /* Sources */,
+				4E0A4BB62892EACA009E14D5 /* Frameworks */,
+				4E0A4BB72892EACA009E14D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Gradus_Official_V1;
+			packageProductDependencies = (
+				4E0A4BED2892F403009E14D5 /* SwiftSoup */,
+				4E0A4BF32893010B009E14D5 /* DropDown */,
+				4E0D9B222895A60D00053723 /* EFAutoScrollLabel */,
+				4E87F465289606DE004BD3BA /* Alamofire */,
+			);
+			productName = Gradus_Official_V1;
+			productReference = 4E0A4BB92892EACA009E14D5 /* Gradus_Official_V1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4E0A4BCE2892EACB009E14D5 /* Gradus_Official_V1Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E0A4BE62892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1Tests" */;
+			buildPhases = (
+				4E0A4BCB2892EACB009E14D5 /* Sources */,
+				4E0A4BCC2892EACB009E14D5 /* Frameworks */,
+				4E0A4BCD2892EACB009E14D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E0A4BD12892EACB009E14D5 /* PBXTargetDependency */,
+			);
+			name = Gradus_Official_V1Tests;
+			productName = Gradus_Official_V1Tests;
+			productReference = 4E0A4BCF2892EACB009E14D5 /* Gradus_Official_V1Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4E0A4BD82892EACB009E14D5 /* Gradus_Official_V1UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E0A4BE92892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1UITests" */;
+			buildPhases = (
+				4E0A4BD52892EACB009E14D5 /* Sources */,
+				4E0A4BD62892EACB009E14D5 /* Frameworks */,
+				4E0A4BD72892EACB009E14D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E0A4BDB2892EACB009E14D5 /* PBXTargetDependency */,
+			);
+			name = Gradus_Official_V1UITests;
+			productName = Gradus_Official_V1UITests;
+			productReference = 4E0A4BD92892EACB009E14D5 /* Gradus_Official_V1UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E0A4BB12892EACA009E14D5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					4E0A4BB82892EACA009E14D5 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					4E0A4BCE2892EACB009E14D5 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 4E0A4BB82892EACA009E14D5;
+					};
+					4E0A4BD82892EACB009E14D5 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 4E0A4BB82892EACA009E14D5;
+					};
+				};
+			};
+			buildConfigurationList = 4E0A4BB42892EACA009E14D5 /* Build configuration list for PBXProject "Gradus_Official_V1" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4E0A4BB02892EACA009E14D5;
+			packageReferences = (
+				4E0A4BEC2892F403009E14D5 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				4E0A4BF12892FEDD009E14D5 /* XCRemoteSwiftPackageReference "DropDown" */,
+				4E0A4BF22893010B009E14D5 /* XCRemoteSwiftPackageReference "DropDown" */,
+				4E0D9B212895A60D00053723 /* XCRemoteSwiftPackageReference "EFAutoScrollLabel" */,
+				4E87F464289606DE004BD3BA /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
+			productRefGroup = 4E0A4BBA2892EACA009E14D5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4E0A4BB82892EACA009E14D5 /* Gradus_Official_V1 */,
+				4E0A4BCE2892EACB009E14D5 /* Gradus_Official_V1Tests */,
+				4E0A4BD82892EACB009E14D5 /* Gradus_Official_V1UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E0A4BB72892EACA009E14D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0A4BC92892EACB009E14D5 /* LaunchScreen.storyboard in Resources */,
+				4E0A4BC62892EACB009E14D5 /* Assets.xcassets in Resources */,
+				4E0A4BC42892EACA009E14D5 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BCD2892EACB009E14D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BD72892EACB009E14D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4E0A4BB52892EACA009E14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0D9B1E289586E800053723 /* ClassSpecifics.swift in Sources */,
+				4E0D9B1828944FCE00053723 /* ReportCardObject.swift in Sources */,
+				4E0D9B20289598A800053723 /* schedulePopOverVC.swift in Sources */,
+				4E0A4BF828930B25009E14D5 /* gradePopOverVC.swift in Sources */,
+				4E0D9B142894466800053723 /* BellScheduleVC.swift in Sources */,
+				4E0A4BF628930AC8009E14D5 /* gradesSpecficVC.swift in Sources */,
+				4E87F4AB2896EE64004BD3BA /* liveGPAVC.swift in Sources */,
+				4E87F46A28962401004BD3BA /* TabBarVC.swift in Sources */,
+				4E87F45F2895E98C004BD3BA /* IPRPopOverVC.swift in Sources */,
+				4E0A4BFC2893593A009E14D5 /* TranscriptYear.swift in Sources */,
+				4E0D9B1028942FEA00053723 /* reportCardVC.swift in Sources */,
+				4E0A4BF02892F5C7009E14D5 /* Assignment.swift in Sources */,
+				4E0A4BC12892EACA009E14D5 /* gradesVC.swift in Sources */,
+				4E0A4C0228935BF1009E14D5 /* HomeViewController.swift in Sources */,
+				4E0A4BBD2892EACA009E14D5 /* AppDelegate.swift in Sources */,
+				4E87F45D2895DE57004BD3BA /* iprObject.swift in Sources */,
+				4E0D9B0E2893742E00053723 /* transcriptSpecificVC.swift in Sources */,
+				4E0D9B162894468100053723 /* ContactTeachersVC.swift in Sources */,
+				4E0D9B1C289494AA00053723 /* Teacher.swift in Sources */,
+				4E87F463289605B6004BD3BA /* loginVC.swift in Sources */,
+				4E0A4BFA289357CA009E14D5 /* transcriptVC.swift in Sources */,
+				4E0A4BBF2892EACA009E14D5 /* SceneDelegate.swift in Sources */,
+				4E0D9B1A2894737800053723 /* reportCardPopOverVC.swift in Sources */,
+				4E87F4612896012C004BD3BA /* ProfileVC.swift in Sources */,
+				4E0D9B122894464F00053723 /* progressReportVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BCB2892EACB009E14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0A4BD42892EACB009E14D5 /* Gradus_Official_V1Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E0A4BD52892EACB009E14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0A4BE02892EACB009E14D5 /* Gradus_Official_V1UITestsLaunchTests.swift in Sources */,
+				4E0A4BDE2892EACB009E14D5 /* Gradus_Official_V1UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4E0A4BD12892EACB009E14D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E0A4BB82892EACA009E14D5 /* Gradus_Official_V1 */;
+			targetProxy = 4E0A4BD02892EACB009E14D5 /* PBXContainerItemProxy */;
+		};
+		4E0A4BDB2892EACB009E14D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E0A4BB82892EACA009E14D5 /* Gradus_Official_V1 */;
+			targetProxy = 4E0A4BDA2892EACB009E14D5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4E0A4BC22892EACA009E14D5 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4E0A4BC32892EACA009E14D5 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4E0A4BC72892EACB009E14D5 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4E0A4BC82892EACB009E14D5 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4E0A4BE12892EACB009E14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4E0A4BE22892EACB009E14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E0A4BE42892EACB009E14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gradus_Official_V1/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4E0A4BE52892EACB009E14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gradus_Official_V1/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4E0A4BE72892EACB009E14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gradus_Official_V1.app/Gradus_Official_V1";
+			};
+			name = Debug;
+		};
+		4E0A4BE82892EACB009E14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gradus_Official_V1.app/Gradus_Official_V1";
+			};
+			name = Release;
+		};
+		4E0A4BEA2892EACB009E14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gradus_Official_V1;
+			};
+			name = Debug;
+		};
+		4E0A4BEB2892EACB009E14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WHKAPK45;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "none.Gradus-Official-V1UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gradus_Official_V1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E0A4BB42892EACA009E14D5 /* Build configuration list for PBXProject "Gradus_Official_V1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E0A4BE12892EACB009E14D5 /* Debug */,
+				4E0A4BE22892EACB009E14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E0A4BE32892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E0A4BE42892EACB009E14D5 /* Debug */,
+				4E0A4BE52892EACB009E14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E0A4BE62892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E0A4BE72892EACB009E14D5 /* Debug */,
+				4E0A4BE82892EACB009E14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E0A4BE92892EACB009E14D5 /* Build configuration list for PBXNativeTarget "Gradus_Official_V1UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E0A4BEA2892EACB009E14D5 /* Debug */,
+				4E0A4BEB2892EACB009E14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E0A4BEC2892F403009E14D5 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4E0A4BF12892FEDD009E14D5 /* XCRemoteSwiftPackageReference "DropDown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AssistoLab/DropDown";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.5;
+			};
+		};
+		4E0A4BF22893010B009E14D5 /* XCRemoteSwiftPackageReference "DropDown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AssistoLab/DropDown";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4E0D9B212895A60D00053723 /* XCRemoteSwiftPackageReference "EFAutoScrollLabel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EFPrefix/EFAutoScrollLabel";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		4E87F464289606DE004BD3BA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E0A4BED2892F403009E14D5 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E0A4BEC2892F403009E14D5 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		4E0A4BF32893010B009E14D5 /* DropDown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E0A4BF22893010B009E14D5 /* XCRemoteSwiftPackageReference "DropDown" */;
+			productName = DropDown;
+		};
+		4E0D9B222895A60D00053723 /* EFAutoScrollLabel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E0D9B212895A60D00053723 /* XCRemoteSwiftPackageReference "EFAutoScrollLabel" */;
+			productName = EFAutoScrollLabel;
+		};
+		4E87F465289606DE004BD3BA /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E87F464289606DE004BD3BA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4E0A4BB12892EACA009E14D5 /* Project object */;
+}
