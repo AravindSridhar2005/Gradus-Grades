@@ -93,10 +93,10 @@
         <scene sceneID="Qtf-Jf-kNx">
             <objects>
                 <navigationController id="gxF-ES-xYk" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Grades" id="XH4-M2-NJk">
+                    <tabBarItem key="tabBarItem" title="Grades" image="book.closed.fill" catalog="system" id="XH4-M2-NJk">
                         <imageReference key="largeContentSizeImage" image="bookmark.square" catalog="system" symbolScale="default"/>
                         <color key="badgeColor" name="AccentColor"/>
-                        <imageReference key="selectedImage" image="bookmark.square.fill" catalog="system" symbolScale="default"/>
+                        <imageReference key="selectedImage" image="book.closed.fill" catalog="system" symbolScale="default"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="e2q-Fy-rX0">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -264,7 +264,7 @@
             </objects>
             <point key="canvasLocation" x="-749.27536231884062" y="2488.3928571428569"/>
         </scene>
-        <!--Home-->
+        <!--Gradus-->
         <scene sceneID="Hsi-6L-N4Z">
             <objects>
                 <viewController storyboardIdentifier="Home" id="NNo-P0-8AH" customClass="HomeViewController" customModule="Gradus_Official_V1" customModuleProvider="target" sceneMemberID="viewController">
@@ -280,7 +280,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Transcript "/>
                                         <connections>
-                                            <action selector="TranscriptPressed:" destination="NNo-P0-8AH" eventType="touchUpInside" id="mzS-rc-7Ak"/>
+                                            <action selector="transcriptPressed:" destination="NNo-P0-8AH" eventType="touchUpInside" id="3i4-p1-XPv"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Srv-yf-hPx">
@@ -325,7 +325,7 @@
                             <constraint firstItem="vLP-ME-8f1" firstAttribute="centerY" secondItem="smU-rr-Weh" secondAttribute="centerY" id="TsE-vg-Tg0"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Home" id="Wyj-5z-Xmo"/>
+                    <navigationItem key="navigationItem" title="Gradus" id="Wyj-5z-Xmo"/>
                     <connections>
                         <outlet property="contactTeachers" destination="xWH-69-qln" id="xwb-Zv-VoZ"/>
                     </connections>
@@ -488,7 +488,16 @@
                         <viewLayoutGuide key="safeArea" id="blr-2U-glJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Schedule" id="giW-A3-YlJ"/>
+                    <navigationItem key="navigationItem" title="Schedule" id="giW-A3-YlJ">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="KAX-4r-cgD">
+                            <connections>
+                                <action selector="navBarClicked:" destination="3ta-FW-gkE" id="kry-jR-wIQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="SemesterButton" destination="KAX-4r-cgD" id="J7H-fi-CtL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="341-02-aMZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -694,8 +703,8 @@
         <scene sceneID="Dw3-Zz-HTZ">
             <objects>
                 <navigationController storyboardIdentifier="homeNav" id="V3G-ry-Mv9" customClass="homeNav" customModule="Gradus_Official_V1" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" id="5j7-Vw-U0f">
-                        <imageReference key="selectedImage" image="homekit" catalog="system" symbolScale="default"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="5j7-Vw-U0f">
+                        <imageReference key="selectedImage" image="house.fill" catalog="system" symbolScale="default"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hDP-44-5l9">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -716,8 +725,8 @@
         <scene sceneID="0lo-Ro-4Ya">
             <objects>
                 <navigationController id="gMx-FA-2OR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Live GPA" id="M8w-vh-iPq">
-                        <imageReference key="selectedImage" image="graduationcap.circle.fill" catalog="system" symbolScale="default"/>
+                    <tabBarItem key="tabBarItem" title="Live GPA" image="graduationcap.fill" catalog="system" id="M8w-vh-iPq">
+                        <imageReference key="selectedImage" image="graduationcap.fill" catalog="system" symbolScale="default"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="i9u-qt-RnM">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -768,10 +777,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="book.closed.fill" catalog="system" width="115" height="128"/>
         <image name="bookmark.square" catalog="system" width="128" height="114"/>
-        <image name="bookmark.square.fill" catalog="system" width="128" height="114"/>
-        <image name="graduationcap.circle.fill" catalog="system" width="128" height="121"/>
-        <image name="homekit" catalog="system" width="128" height="106"/>
+        <image name="graduationcap.fill" catalog="system" width="128" height="108"/>
+        <image name="house.fill" catalog="system" width="128" height="106"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

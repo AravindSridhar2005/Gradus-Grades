@@ -8,8 +8,10 @@
 import UIKit
 import SwiftSoup
 import Alamofire
-class transcriptVC: UIViewController {
-    var transcriptHTML = UserDefaults.standard.object(forKey: "247070transcript") as! String
+class transcriptVC: UIViewController {func getTranscriptHTML() {
+   
+}
+    var transcriptHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript") as! String
     var transcriptYears = [transcriptYear]()
     var testLabel = UILabel()
     var arrayOfButtons = [UIButton]()
@@ -68,54 +70,48 @@ class transcriptVC: UIViewController {
             transcriptYears.removeAll()
             print(arrayOfButtons.count)
             dict.removeAll()
-            getTranscriptHTML()
-            UserDefaults.standard.set(transcriptHTML, forKey: "247070transcript")
-            setUp(HTML: transcriptHTML as! String)
+            getTranscriptHTML(){
+                response in
+                self.setUp(HTML: response)
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+                
+            }
+            
             refreshControl.endRefreshing()
 
         }
-    func getTranscriptHTML() {
-        do {
-            let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
-            var DemograhpicsHTML:String = ""
-            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
-            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
-            if try logonDoc.select("[name=__RequestVerificationToken]").count != 1 {
-                let transcriptURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Transcript.aspx")
-                self.transcriptHTML = try String(contentsOf: transcriptURL!, encoding: .ascii)
-                print(UserDefaults.standard.object(forKey: "username"))
-                return
-            }
-            else {
-                post() {
-                    response in
-                    self.transcriptHTML = response
-                    //print(response)
-                }
-            }
-        }
-        catch {
-            
-        }
-    }
-    func post(completion: @escaping (String) -> Void) {
+    func getTranscriptHTML(completion: @escaping (String) -> Void) {
         let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
         var DemograhpicsHTML:String = ""
-        
+        let transcriptURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Transcript.aspx")
         do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
                 let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
                 var logonHTML:String = ""
                 logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
                 let logonDoc = try SwiftSoup.parse(logonHTML)
                 let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
-            
-                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken": token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
                 AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
                     let data = String(data: response.data!, encoding: .utf8)
-                    completion(data ?? "")
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        completion(try String(contentsOf: transcriptURL!, encoding: .ascii))
+                    }
+                    catch{
+                        
+                    }
                 }
-            
-            
+            }
+            else {
+                completion(try String(contentsOf: transcriptURL!, encoding: .ascii))
+            }
         }
         catch {
             

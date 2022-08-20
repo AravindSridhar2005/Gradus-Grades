@@ -8,7 +8,7 @@
 import UIKit
 import SwiftSoup
 class ContactTeachersVC: UIViewController {
-    var weekViewHTML = UserDefaults.standard.object(forKey: "247070weekview") as! String
+    var weekViewHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview") as! String
     var Teachers = [Teacher]()
     var yPos = 30.0
     lazy var contentViewSize = CGSize(width: self.view.frame.width, height: yPos + (86 * getHeight()) + 10.0)

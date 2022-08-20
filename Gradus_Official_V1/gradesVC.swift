@@ -9,6 +9,7 @@ import UIKit
 import SwiftSoup
 import DropDown
 import EFAutoScrollLabel
+import Alamofire
 class CellClass: UITableViewCell {
     
 }
@@ -43,14 +44,14 @@ class gradesVC: UIViewController {
         let menu = DropDown()
         do {
             
-            setUpCurrentGradesHTML()
+            
             let doc2 = try SwiftSoup.parse(currentGradesHTML)
             let currentMPHelper = try doc2.select("div.sg-content-grid-container").select("#plnMain_ddlReportCardRuns").select("option")
         
             var currentMPTemp:String = ""
             for element in currentMPHelper{
                 if try element.text() != "(All Runs)" {
-                    menu.dataSource.append(try element.text())
+                    menu.dataSource.append("MP\(try element.text())")
                 }
             }
              
@@ -62,11 +63,13 @@ class gradesVC: UIViewController {
         menu.selectionAction = { index, title in
             self.MPButton.title = title
             var mp = title
+            var array = Array(mp)
+            array.remove(at: 0)
+            array.remove(at: 0)
+            mp = String(array)
             self.getNewHTMl(mp: mp, isRefresh: false) {
                 response in
-                for button in self.arrayOfButtons {
-                    button.setTitle("", for: .normal)
-                }
+                
                 for button in self.arrayOfButtons {
                     button.removeFromSuperview()
                 }
@@ -82,7 +85,7 @@ class gradesVC: UIViewController {
                 self.contentViewSize.height = self.getScrollHeight(HTML: response) + 100
                 self.scrollView.contentSize = self.contentViewSize
                 self.containerView.frame.size = self.contentViewSize
-                self.display(html: response, displayMultiplier: 1.0)
+                self.display(html: response)
             }
             
             
@@ -113,11 +116,14 @@ class gradesVC: UIViewController {
     }()
     
     func setUpCurrentGradesHTML() {
-        let file = "Users/aravindsridhar/gradus/HacHtmls/Grades4.txt"
-        let path=URL(fileURLWithPath: file)
-        self.currentGradesHTML = try! String(contentsOf: path)
-        let char: Set<Character> = ["\\"]
-        currentGradesHTML.removeAll(where: { char.contains($0) })
+        
+        let currentGradesURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")
+        do {
+            self.currentGradesHTML = try String(contentsOf: currentGradesURL!, encoding: .ascii)
+        }
+        catch {
+            
+        }
     }
     let floatingButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
@@ -138,6 +144,7 @@ class gradesVC: UIViewController {
         var rightNavBarButton = UIBarButtonItem(customView:floatingButton)
          self.navigationItem.leftBarButtonItem = rightNavBarButton
     }
+  
     @objc func didTapProfileButton() {
         let vc = ProfileVC()
         vc.title = "Profile"
@@ -146,8 +153,10 @@ class gradesVC: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     override func viewDidLoad() {
+    self.setUpCurrentGradesHTML()
+
         super.viewDidLoad()
-       
+        //setUpCurrentGradesHTML()
         view.addSubview(containerView)
         
         print("Hello")
@@ -159,52 +168,35 @@ class gradesVC: UIViewController {
             var currentMPTemp:String = ""
             for element in currentMPHelper{
                 if (element.hasAttr("selected")){
-                    MPButton.title = try element.text()
+                    MPButton.title = "MP\(try element.text())"
                     currentMP = try element.text()
                 }
             }
             view.addSubview(scrollView)
             scrollView.addSubview(containerView)
-            //scrollView.addSubview(GradeLabel)
-            //scrollView.addSubview(MPButton)
             
-            testLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 49))
-            
-            testLabel.center.x = self.containerView.center.x
-            testLabel.center.y = 10
-            testLabel.textAlignment = .center
-            
-            testLabel.font = testLabel.font.withSize(41)
-            containerView.addSubview(testLabel)
             floatingButton.addTarget(self, action: #selector(didTapProfileButton), for: .touchUpInside)
             
         }
         catch {
             
         }
-        let height = view.frame.height
-        if height >= 800 {
-            displayMultiplier = 3.0
-        }
-        else if height >= 700 {
-            displayMultiplier = 2.5
-        }
-        else {
-            displayMultiplier = 2.0
-        }
         
-        display(html: currentGradesHTML, displayMultiplier: displayMultiplier)
+        
+        display(html: currentGradesHTML)
+        
    
     }
     func getScrollHeight(HTML: String) -> CGFloat {
         if HTML == "" {
+            
             setUpCurrentGradesHTML()
             
             var height = 0.0
             do {
                 let doc = try SwiftSoup.parse(currentGradesHTML)
                 let arrayOfClassNamesTemp:Elements = try doc.select("a.sg-header-heading")
-                height = 80.0 * Double(arrayOfClassNamesTemp.count)
+                height = 70.0 * Double(arrayOfClassNamesTemp.count)
                 print(arrayOfClassNamesTemp.count)
             }
             catch {
@@ -216,7 +208,7 @@ class gradesVC: UIViewController {
         do {
             let doc = try SwiftSoup.parse(HTML)
             let arrayOfClassNamesTemp:Elements = try doc.select("a.sg-header-heading")
-            height = 80.0 * Double(arrayOfClassNamesTemp.count)
+            height = 70.0 * Double(arrayOfClassNamesTemp.count)
             print(arrayOfClassNamesTemp.count)
         }
         catch {
@@ -224,77 +216,40 @@ class gradesVC: UIViewController {
         }
         return height
     }
-    func display(html: String, displayMultiplier: CGFloat) {
+    func display(html: String) {
         setUp(html: html)
         for i in 0..<arrayOfClassNames.count {
-            ypos += 80
-            var nameLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width * 0.75, height: 20))
+            ypos += 70
+            let button = UIButton(frame: CGRect(x: 10, y: ypos, width: view.frame.width - 20.0, height: 40))
+            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            button.center.y = ypos
+        
+            
+            button.backgroundColor = .link
+            button.layer.cornerRadius = 20
+            containerView.addSubview(button)
+            var nameLabel = UILabel(frame: CGRect(x: 20, y: ypos, width: view.frame.width * 0.75 - 20, height: 20))
             nameLabel.text = arrayOfClassNames[i]
-            nameLabel.textColor = .black
+            nameLabel.center.y = ypos
+            nameLabel.textColor = .white
             nameLabel.textAlignment = .left
             containerView.addSubview(nameLabel)
             var gradeLabel = UILabel(frame: CGRect(x: view.frame.width * 0.75, y: ypos, width: view.frame.width * 0.25, height: 20))
-            gradeLabel.textColor = .black
+            gradeLabel.textColor = .white
             gradeLabel.text = arrayOfGrades[i]
             gradeLabel.textAlignment = .center
+            gradeLabel.center.y = ypos
             containerView.addSubview(gradeLabel)
-            let button = UIButton(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 20))
-            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            containerView.addSubview(button)
+            
+            
             arrayOfButtons.append(button)
             arrayOfLabels.append(nameLabel)
             arrayOfLabels.append(gradeLabel)
-            /*
-            let nameButton = UIButton()
-            nameButton.setTitle(arrayOfClassNames[i], for: .normal)
-            nameButton.setTitleColor(.white, for: .normal)
-            nameButton.contentHorizontalAlignment = .left
-            nameButton.setTitleColor(.black, for: .normal)
-            nameButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            containerView.addSubview(nameButton)
-            let gradeLabel = UIButton()
-            gradeLabel.setTitle(arrayOfGrades[i], for: .normal)
-            gradeLabel.setTitleColor(.black, for: .normal)
-            gradeLabel.contentHorizontalAlignment = .right
-            containerView.addSubview(gradeLabel)
-            if arrayOfButtons.count == 0{
-                nameButton.translatesAutoresizingMaskIntoConstraints = false
-                gradeLabel.translatesAutoresizingMaskIntoConstraints = false
-                let leftConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .leftMargin, relatedBy: .equal, toItem: view, attribute: .leftMargin, multiplier: 1.0, constant: 0.0)
-                let rightConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .rightMargin, relatedBy: .equal, toItem: view, attribute: .rightMargin, multiplier: 0.75, constant: 0.0)
-                let topConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .topMargin, relatedBy: .equal, toItem: testLabel, attribute: .bottomMargin, multiplier: 2, constant: 0.0)
-            
-                let leftConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .leftMargin, relatedBy: .equal, toItem: nameButton, attribute: .rightMargin, multiplier: 1.0, constant: 0.0)
-                let rightConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .rightMargin, relatedBy: .equal, toItem: view, attribute: .rightMargin, multiplier: 1, constant: 0.0)
-                let topConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .topMargin, relatedBy: .equal, toItem: testLabel, attribute: .bottomMargin, multiplier: 2, constant: 0.0)
-                view.addConstraints([leftConstraint1, rightConstraint1, leftConstraint2, rightConstraint2, topConstraint2, topConstraint1])
-            }
-            else if arrayOfButtons.count != 0 {
-                nameButton.translatesAutoresizingMaskIntoConstraints = false
-                gradeLabel.translatesAutoresizingMaskIntoConstraints = false
-                let leftConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .leftMargin, relatedBy: .equal, toItem: view, attribute: .leftMargin, multiplier: 1.0, constant: 0.0)
-                let rightConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .rightMargin, relatedBy: .equal, toItem: view, attribute: .rightMargin, multiplier: 0.75, constant: 0.0)
-                let topConstraint1 = NSLayoutConstraint(item: nameButton, attribute: .topMargin, relatedBy: .equal, toItem: arrayOfButtons[arrayOfButtons.count - 2], attribute: .bottomMargin, multiplier: displayMultiplier, constant: 0.0)
-            
-                let leftConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .leftMargin, relatedBy: .equal, toItem: nameButton, attribute: .rightMargin, multiplier: 1.0, constant: 0.0)
-                let rightConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .rightMargin, relatedBy: .equal, toItem: view, attribute: .rightMargin, multiplier: 1, constant: 0.0)
-                let topConstraint2 = NSLayoutConstraint(item: gradeLabel, attribute: .topMargin, relatedBy: .equal, toItem: arrayOfButtons[arrayOfButtons.count - 1], attribute: .bottomMargin, multiplier: displayMultiplier, constant: 0.0)
-                view.addConstraints([leftConstraint1, rightConstraint1, topConstraint1, leftConstraint2, rightConstraint2, topConstraint2])
-            }
-            arrayOfButtons.append(nameButton)
-            arrayOfButtons.append(gradeLabel)
-            //arrayOfLabels.append(gradeLabel)
-             */
-            
+
         }
     }
     
-    @objc func buttonAction(sender:UIButton!) {/*
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let Homevc : gradesSpecficVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "gradesSpecificVC") as! gradesSpecficVC
-        Homevc.arrayOfAssignments = dict[sender.titleLabel!.text!]!
-        self.present(Homevc, animated: true, completion: nil)
-                                                 */
+    @objc func buttonAction(sender:UIButton!) {
         if arrayOfButtons.contains(sender) {
             var i = arrayOfButtons.firstIndex(of: sender)!
             
@@ -302,8 +257,8 @@ class gradesVC: UIViewController {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let Homevc : gradesSpecficVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "gradesSpecificVC") as! gradesSpecficVC
             Homevc.arrayOfAssignments = dict[className]!
+            Homevc.courseName = className
             self.present(Homevc, animated: true, completion: nil)
-            
         }
       }
     
@@ -379,33 +334,187 @@ class gradesVC: UIViewController {
             //print(DemograhpicsHTML)
             if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
                 //POST REQUEST HERE with USERNAME AND PASSWORD
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        //print(data)
+                        self.setUpCurrentGradesHTML()
+                        let doc2 = try SwiftSoup.parse(self.currentGradesHTML)
+                        
+                        var viewStateKey = try doc2.select("#__VIEWSTATE").first()!.attr("value")
+                        var eventValidationKey = try doc2.select("#__EVENTVALIDATION").first()!.attr("value")
+                        var MPData = [String:String]()
+                        MPData["__EVENTTARGET"] =  "ctl00$plnMain$btnRefreshView"
+                                       MPData["__EVENTARGUMENT"] =  ""
+                                       MPData["__VIEWSTATE"] = viewStateKey
+                                       MPData["__VIEWSTATEGENERATOR"] = "B0093F3C"
+                                       MPData["__EVENTVALIDATION"] = eventValidationKey
+                                       MPData["ctl00$plnMain$hdnValidMHACLicense"] =  "Y"
+                                       MPData["ctl00$plnMain$hdnIsVisibleClsWrk"] = "N"
+                                       MPData["ctl00$plnMain$hdnIsVisibleCrsAvg"] = "N"
+                                       MPData["ctl00$plnMain$hdnJsAlert"] = "Averages cannot be displayed when  Report Card Run is set to (All Runs)."
+                                       MPData["ctl00$plnMain$hdnTitle"] = "Classwork"
+                                       MPData["ctl00$plnMain$hdnLastUpdated"] = "Last Updated"
+                                       MPData["ctl00$plnMain$hdnDroppedCourse"] = "This course was dropped as of"
+                                       MPData["ctl00$plnMain$hdnddlClasses"] = "(All Classes)"
+                                       MPData["ctl00$plnMain$hdnddlCompetencies"] = "(All Classes)"
+                                       MPData["ctl00$plnMain$hdnCompDateDue"] = "Date Due"
+                                       MPData["ctl00$plnMain$hdnCompDateAssigned"] = "Date Assigned"
+                                       MPData["ctl00$plnMain$hdnCompCourse"] = "Course"
+                                       MPData["ctl00$plnMain$hdnCompAssignment"] = "Assignment"
+                                       MPData["ctl00$plnMain$hdnCompAssignmentLabel"] = "Assignments Not Related to Any Competency"
+                                       MPData["ctl00$plnMain$hdnCompNoAssignments"] = "No assignments found"
+                                       MPData["ctl00$plnMain$hdnCompNoClasswork"] = "Classwork could not be found for this competency for the selected report card run."
+                                       MPData["ctl00$plnMain$hdnCompScore"] = "Score"
+                                       MPData["ctl00$plnMain$hdnCompPoints"] = "Points"
+                                       MPData["ctl00$plnMain$hdnddlReportCardRuns1"] = "(All Runs)" //TODO: huh
+                                       MPData["ctl00$plnMain$hdnddlReportCardRuns2"] = "(All Terms)"
+                                       MPData["ctl00$plnMain$hdnbtnShowAverage"] = "Show All Averages"
+                                       MPData["ctl00$plnMain$hdnShowAveragesToolTip"] = "Show all student's averages"
+                                       MPData["ctl00$plnMain$hdnPrintClassworkToolTip"] = "Print all classwork"
+                                       MPData["ctl00$plnMain$hdnPrintClasswork"] = "Print Classwork"
+                                       MPData["ctl00$plnMain$hdnCollapseToolTip"] = "Collapse all courses"
+                                       MPData["ctl00$plnMain$hdnCollapse"] = "Collapse All"
+                                       MPData["ctl00$plnMain$hdnFullToolTip"] = "Switch courses to Full View"
+                                       MPData["ctl00$plnMain$hdnViewFull"] = "Full View"
+                                       MPData["ctl00$plnMain$hdnQuickToolTip"] = "Switch courses to Quick View"
+                                       MPData["ctl00$plnMain$hdnViewQuick"] = "Quick View"
+                                       MPData["ctl00$plnMain$hdnExpand"] = "Expand All"
+                                       MPData["ctl00$plnMain$hdnExpandToolTip"] = "Expand all courses"
+                                       MPData["ctl00$plnMain$hdnChildCompetencyMessage"] = "This competency is calculated as an average of the following competencies"
+                                       MPData["ctl00$plnMain$hdnCompetencyScoreLabel"] = "Grade"
+                                       MPData["ctl00$plnMain$hdnAverageDetailsDialogTitle"] = "Average Details"
+                                       MPData["ctl00$plnMain$hdnAssignmentCompetency"] = "Assignment Competency"
+                                       MPData["ctl00$plnMain$hdnAssignmentCourse"] = "Assignment Course"
+                                       MPData["ctl00$plnMain$hdnTooltipTitle"] = "Title"
+                                       MPData["ctl00$plnMain$hdnCategory"] = "Category"
+                                       MPData["ctl00$plnMain$hdnDueDate"] = "Due Date"
+                                       MPData["ctl00$plnMain$hdnMaxPoints"] = "Max Points"
+                                       MPData["ctl00$plnMain$hdnCanBeDropped"] = "Can Be Dropped"
+                                       MPData["ctl00$plnMain$hdnHasAttachments"] = "Has Attachments"
+                                       MPData["ctl00$plnMain$hdnExtraCredit"] = "Extra Credit"
+                                       MPData["ctl00$plnMain$hdnType"] = "Type"
+                                     MPData["ctl00$plnMain$hdnAssignmentDataInfo"] = "Information could not be found for the assignment"
+                                        MPData["ctl00$plnMain$ddlReportCardRuns"] = "\(mp)-2023" //TODO: maybe not 2022 always, check
+                                        MPData["ctl00$plnMain$ddlClasses"] = "ALL"
+                                        MPData["ctl00$plnMain$ddlCompetencies"] = "ALL"
+                                        MPData["ctl00$plnMain$ddlOrderBy"] = "Class"
+                        AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
+                            let data1 = String(data: response.data!, encoding: .utf8)
+                            completion(data1!)
+                            do {
+                                var html = try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")!, encoding: .ascii)
+                                completion(html)
+                                print("HAD TO LOGIN")
+                            }
+                            catch {
+                                
+                            }
+                        }
+                    }
+                    catch{
+                        
+                    }
+                }
             }
-                //GET GRADES FROM MP HERE
-            let file = "Users/aravindsridhar/gradus/HacHtmls/Grades\(mp).txt"
-            let path=URL(fileURLWithPath: file)
-            var temp = try! String(contentsOf: path)
-            let char: Set<Character> = ["\\"]
-            temp.removeAll(where: { char.contains($0) })
-            completion(temp)
+            else{//GET GRADES FROM MP HERE
+            let doc2 = try SwiftSoup.parse(currentGradesHTML)
+            
+            var viewStateKey = try doc2.select("#__VIEWSTATE").first()!.attr("value")
+            var eventValidationKey = try doc2.select("#__EVENTVALIDATION").first()!.attr("value")
+            var MPData = [String:String]()
+            MPData["__EVENTTARGET"] =  "ctl00$plnMain$btnRefreshView"
+                           MPData["__EVENTARGUMENT"] =  ""
+                           MPData["__VIEWSTATE"] = viewStateKey
+                           MPData["__VIEWSTATEGENERATOR"] = "B0093F3C"
+                           MPData["__EVENTVALIDATION"] = eventValidationKey
+                           MPData["ctl00$plnMain$hdnValidMHACLicense"] =  "Y"
+                           MPData["ctl00$plnMain$hdnIsVisibleClsWrk"] = "N"
+                           MPData["ctl00$plnMain$hdnIsVisibleCrsAvg"] = "N"
+                           MPData["ctl00$plnMain$hdnJsAlert"] = "Averages cannot be displayed when  Report Card Run is set to (All Runs)."
+                           MPData["ctl00$plnMain$hdnTitle"] = "Classwork"
+                           MPData["ctl00$plnMain$hdnLastUpdated"] = "Last Updated"
+                           MPData["ctl00$plnMain$hdnDroppedCourse"] = "This course was dropped as of"
+                           MPData["ctl00$plnMain$hdnddlClasses"] = "(All Classes)"
+                           MPData["ctl00$plnMain$hdnddlCompetencies"] = "(All Classes)"
+                           MPData["ctl00$plnMain$hdnCompDateDue"] = "Date Due"
+                           MPData["ctl00$plnMain$hdnCompDateAssigned"] = "Date Assigned"
+                           MPData["ctl00$plnMain$hdnCompCourse"] = "Course"
+                           MPData["ctl00$plnMain$hdnCompAssignment"] = "Assignment"
+                           MPData["ctl00$plnMain$hdnCompAssignmentLabel"] = "Assignments Not Related to Any Competency"
+                           MPData["ctl00$plnMain$hdnCompNoAssignments"] = "No assignments found"
+                           MPData["ctl00$plnMain$hdnCompNoClasswork"] = "Classwork could not be found for this competency for the selected report card run."
+                           MPData["ctl00$plnMain$hdnCompScore"] = "Score"
+                           MPData["ctl00$plnMain$hdnCompPoints"] = "Points"
+                           MPData["ctl00$plnMain$hdnddlReportCardRuns1"] = "(All Runs)" //TODO: huh
+                           MPData["ctl00$plnMain$hdnddlReportCardRuns2"] = "(All Terms)"
+                           MPData["ctl00$plnMain$hdnbtnShowAverage"] = "Show All Averages"
+                           MPData["ctl00$plnMain$hdnShowAveragesToolTip"] = "Show all student's averages"
+                           MPData["ctl00$plnMain$hdnPrintClassworkToolTip"] = "Print all classwork"
+                           MPData["ctl00$plnMain$hdnPrintClasswork"] = "Print Classwork"
+                           MPData["ctl00$plnMain$hdnCollapseToolTip"] = "Collapse all courses"
+                           MPData["ctl00$plnMain$hdnCollapse"] = "Collapse All"
+                           MPData["ctl00$plnMain$hdnFullToolTip"] = "Switch courses to Full View"
+                           MPData["ctl00$plnMain$hdnViewFull"] = "Full View"
+                           MPData["ctl00$plnMain$hdnQuickToolTip"] = "Switch courses to Quick View"
+                           MPData["ctl00$plnMain$hdnViewQuick"] = "Quick View"
+                           MPData["ctl00$plnMain$hdnExpand"] = "Expand All"
+                           MPData["ctl00$plnMain$hdnExpandToolTip"] = "Expand all courses"
+                           MPData["ctl00$plnMain$hdnChildCompetencyMessage"] = "This competency is calculated as an average of the following competencies"
+                           MPData["ctl00$plnMain$hdnCompetencyScoreLabel"] = "Grade"
+                           MPData["ctl00$plnMain$hdnAverageDetailsDialogTitle"] = "Average Details"
+                           MPData["ctl00$plnMain$hdnAssignmentCompetency"] = "Assignment Competency"
+                           MPData["ctl00$plnMain$hdnAssignmentCourse"] = "Assignment Course"
+                           MPData["ctl00$plnMain$hdnTooltipTitle"] = "Title"
+                           MPData["ctl00$plnMain$hdnCategory"] = "Category"
+                           MPData["ctl00$plnMain$hdnDueDate"] = "Due Date"
+                           MPData["ctl00$plnMain$hdnMaxPoints"] = "Max Points"
+                           MPData["ctl00$plnMain$hdnCanBeDropped"] = "Can Be Dropped"
+                           MPData["ctl00$plnMain$hdnHasAttachments"] = "Has Attachments"
+                           MPData["ctl00$plnMain$hdnExtraCredit"] = "Extra Credit"
+                           MPData["ctl00$plnMain$hdnType"] = "Type"
+                         MPData["ctl00$plnMain$hdnAssignmentDataInfo"] = "Information could not be found for the assignment"
+                            MPData["ctl00$plnMain$ddlReportCardRuns"] = "\(mp)-2023" //TODO: maybe not 2022 always, check
+                            MPData["ctl00$plnMain$ddlClasses"] = "ALL"
+                            MPData["ctl00$plnMain$ddlCompetencies"] = "ALL"
+                            MPData["ctl00$plnMain$ddlOrderBy"] = "Class"
+            AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
+                let data1 = String(data: response.data!, encoding: .utf8)
+                completion(data1!)
+                do {
+                    var html = try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")!, encoding: .ascii)
+                    completion(html)
+                    print("NO LOGIN")
+                    
+                }
+                catch {
+                    
+                }
+            }
+            }
             
         }
         catch {
             
         }
-        /*
-        let file = "Users/aravindsridhar/gradus/HacHtmls/Grades\(mp).txt"
-        let path=URL(fileURLWithPath: file)
-        var temp = try! String(contentsOf: path)
-        let char: Set<Character> = ["\\"]
-        temp.removeAll(where: { char.contains($0) })
-        return temp
-         */
     }
     func getNewHTMl(mp: String, isRefresh: Bool, completion: @escaping (String) -> Void) {
         if isRefresh == true {
             getFiles(mp: mp) {
                 response in
                 UserDefaults.standard.set(response, forKey: "\(self.username)MP:\(mp)")
+                if mp == self.currentMP {
+                    self.currentGradesHTML = response
+                }
                 completion(response)
             }
             
@@ -414,13 +523,16 @@ class gradesVC: UIViewController {
             completion(currentGradesHTML)
         }
         else if UserDefaults.standard.object(forKey: "\(username)MP:\(mp)") != nil {
+            print("Already Saved String")
           completion(UserDefaults.standard.object(forKey: "\(username)MP:\(mp)") as! String)
         }
+        else{
             getFiles(mp: mp) {
                 response in
                 UserDefaults.standard.set(response, forKey: "\(self.username)MP:\(mp)")
                 completion(response)
             }
+        }
     }
   
   
@@ -438,12 +550,14 @@ class gradesVC: UIViewController {
 
         @objc func refresh()
         {
-            let mp = MPButton.title!
-            self.getNewHTMl(mp: mp, isRefresh: false) {
+            var mp = MPButton.title!
+            var array = Array(mp)
+            array.remove(at: 0)
+            array.remove(at: 0)
+            mp = String(array)
+            self.getNewHTMl(mp: mp, isRefresh: true) {
                 response in
-                for button in self.arrayOfButtons {
-                    button.setTitle("", for: .normal)
-                }
+                
                 for button in self.arrayOfButtons {
                     button.removeFromSuperview()
                 }
@@ -459,7 +573,7 @@ class gradesVC: UIViewController {
                 self.contentViewSize.height = self.getScrollHeight(HTML: response) + 100
                 self.scrollView.contentSize = self.contentViewSize
                 self.containerView.frame.size = self.contentViewSize
-                self.display(html: response, displayMultiplier: 1.0)
+                self.display(html: response)
             }
             
             // Code to refresh table view

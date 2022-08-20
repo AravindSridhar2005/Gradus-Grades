@@ -11,7 +11,8 @@ import Alamofire
 class ProfileVC: UIViewController {
         var profile = Profile(studentID: "", studentName: "", studentBirthDay: "", counselor: "", building: "", grade: "", language: "")
     var logoutButton = UIButton()
-    var DemographicsHTML  = ""
+    var arrayOfLabels = [UILabel]()
+    var DemographicsHTML  = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics") as? String ?? ""
     lazy var contentViewSize = CGSize(width: self.view.frame.width, height: 350)
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
@@ -35,7 +36,6 @@ class ProfileVC: UIViewController {
         view.addSubview(containerView)
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        getDemographicsHTML()
         logoutButton.setTitle("Logout", for: .normal)
         logoutButton.setTitleColor(.white, for: .normal)
         logoutButton.backgroundColor = .link
@@ -90,7 +90,7 @@ class ProfileVC: UIViewController {
         language .textColor = .black
         containerView.addSubview(language)
         
-        
+        arrayOfLabels.append(contentsOf: [studentBirthDay, language, Grade, building, Counselor, studentName, studentIDLabel])
     }
     
     func setUp(HTML: String) {
@@ -110,25 +110,95 @@ class ProfileVC: UIViewController {
             
         }
     }
-    func getDemographicsHTML() {
-        let file = "Users/aravindsridhar/gradus/HacHtmls/Demographics.txt"
-        let path=URL(fileURLWithPath: file)
-        self.DemographicsHTML = try! String(contentsOf: path)
-        let char: Set<Character> = ["\\"]
-        DemographicsHTML.removeAll(where: { char.contains($0) })
-    }
+   
     
-    
+    //LOGOUT BUTTON
     @objc func buttonAction(sender:UIButton!) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let Homevc : loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Login") as! loginVC
         Homevc.modalPresentationStyle = .fullScreen
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         UserDefaults.standard.set(false, forKey: "ISLOGGEDIN")
-        self.present(Homevc, animated: true, completion: nil)
+        let cstorage = HTTPCookieStorage.shared
+        let url = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOffComplete?loginUrl=https%3A%2F%2Fhac.friscoisd.org%2FHomeAccess%2F")
+        AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOffComplete?loginUrl=https%3A%2F%2Fhac.friscoisd.org%2FHomeAccess%2F", method: .get, encoding: URLEncoding()).response {
+            response in
+            let data = String(data: response.data!, encoding: .utf8)
+            print(data)
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginNavController = storyboard.instantiateViewController(identifier: "LoginNavigationController")
+
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(loginNavController)
         
       }
+    
+    var refreshControl = UIRefreshControl()
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            //refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+            scrollView.refreshControl = refreshControl
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        }
 
+        @objc func refresh()
+        {
+            for label in arrayOfLabels {
+                label.removeFromSuperview()
+            }
+            arrayOfLabels.removeAll()
+            
+            getProfileHTML() {
+                response in
+                self.setUp(HTML: response)
+                self.readyLabels()
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
+                print(response)
+            }
+            
+            
+            refreshControl.endRefreshing()
 
+        }
+
+    func getProfileHTML(completion: @escaping (String) -> Void) {
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        completion(try String(contentsOf: Demographics!, encoding: .ascii))
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else {
+                completion(try String(contentsOf: Demographics!, encoding: .ascii))
+            }
+        }
+        catch {
+            
+        }
+    }
 }
 struct Profile {
     var studentID:String

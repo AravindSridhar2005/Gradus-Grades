@@ -13,12 +13,11 @@ class HomeViewController: UIViewController {
     var reportCardHTML = ""
     var weekViewHTML = ""
     var scheduleHTML = ""
-    var username = "247070"
     var progressReportHTML = ""
-    
+    var DemographicsHTML = ""
     
     @IBOutlet weak var contactTeachers: UIButton!
-    
+
     let floatingButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         //button.layer.masksToBounds = true
@@ -36,12 +35,28 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         //print("Hello")
+        /*
+        self.getReportCardHTML()
+        self.getTranscriptHTML()
+        self.getWeekViewHTML()
+        self.getScheduleHTML()
+       // self.getProgressReportHTML()
+        self.getDemographicsHTML()
+        //print(self.DemographicsHTML)
+        UserDefaults.standard.set(self.reportCardHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC")
+       
+        UserDefaults.standard.set(self.transcriptHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+        UserDefaults.standard.set(self.weekViewHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview")
+        UserDefaults.standard.set(self.scheduleHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+        UserDefaults.standard.set(self.progressReportHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)ProgressReport")
+        UserDefaults.standard.set(self.DemographicsHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
+         */
         
-        
-        
+       
         floatingButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
     override func viewDidAppear(_ animated: Bool) {
+       
         keepLoggedIn() {
             response in
             if response == true {
@@ -49,16 +64,20 @@ class HomeViewController: UIViewController {
                 self.getTranscriptHTML()
                 self.getWeekViewHTML()
                 self.getScheduleHTML()
-                self.getProgressReportHTML()
-                UserDefaults.standard.set(self.reportCardHTML, forKey: "247070RC")
-                UserDefaults.standard.set(self.username, forKey: "currentusername")
-                UserDefaults.standard.set(self.transcriptHTML, forKey: "247070transcript")
-                UserDefaults.standard.set(self.weekViewHTML, forKey: "247070weekview")
-                UserDefaults.standard.set(self.scheduleHTML, forKey: "247070schedule")
-                UserDefaults.standard.set(self.progressReportHTML, forKey: "247070ProgressReport")
+               // self.getProgressReportHTML()
+                self.getDemographicsHTML()
+                //print(self.DemographicsHTML)
+                UserDefaults.standard.set(self.reportCardHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC")
+               
+                UserDefaults.standard.set(self.transcriptHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+                UserDefaults.standard.set(self.weekViewHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview")
+                UserDefaults.standard.set(self.scheduleHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+                UserDefaults.standard.set(self.progressReportHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)ProgressReport")
+                UserDefaults.standard.set(self.DemographicsHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
             }
             else{
-                print("False")
+                
+                
             }
         //print(UserDefaults.standard.object(forKey: "247070transcript"))
         }
@@ -85,6 +104,26 @@ class HomeViewController: UIViewController {
             
         }
     }
+    func getWeekViewHTML() {
+        let weekViewURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Home/WeekView")
+        
+        do {
+            self.weekViewHTML = try String(contentsOf: weekViewURL!, encoding: .ascii)
+        }
+        catch {
+            
+        }
+    }
+    func getDemographicsHTML() {
+    
+        let demographicURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        do {
+            self.DemographicsHTML = try String(contentsOf: demographicURL!, encoding: .ascii)
+        }
+        catch {
+            
+        }
+    }
     func getProgressReportHTML() {
         let file = "Users/aravindsridhar/gradus/HacHtmls/ProgressReport.txt"
         let path=URL(fileURLWithPath: file)
@@ -101,32 +140,31 @@ class HomeViewController: UIViewController {
             
         }
     }
-    func getWeekViewHTML() {
-        let file = "Users/aravindsridhar/gradus/HacHtmls/WeekView.txt"
-        let path=URL(fileURLWithPath: file)
-        self.weekViewHTML = try! String(contentsOf: path)
-        let char: Set<Character> = ["\\"]
-        weekViewHTML.removeAll(where: { char.contains($0) })
-    }
+    
     
     func getReportCardHTML() {
+        
         let file = "Users/aravindsridhar/gradus/HacHtmls/Report Card MP4.txt"
         let path=URL(fileURLWithPath: file)
         self.reportCardHTML = try! String(contentsOf: path)
         let char: Set<Character> = ["\\"]
         reportCardHTML.removeAll(where: { char.contains($0) })
-    }
-    
-    
-    @IBAction func TranscriptPressed(_ sender: Any) {
-        getTranscriptHTML()
-        let vc = transcriptVC()
-        vc.title = "Transcript"
         
-        UserDefaults.standard.set(transcriptHTML, forKey: "\(username)transcript")
-        navigationController?.pushViewController(vc, animated: true)
+        /*
+        let RCURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx")
+        do {
+            self.reportCardHTML = try String(contentsOf: RCURL!, encoding: .ascii)
+            print(reportCardHTML)
+        }
+        catch {
+            
+        }
+         */
+        
     }
-    /*
+    
+    
+    
     @IBAction func reportCardPressed(_ sender: Any) {
         getReportCardHTML()
         //print(reportCardHTML)
@@ -136,16 +174,17 @@ class HomeViewController: UIViewController {
         vc.reportCardHTML = reportCardHTML
         navigationController?.pushViewController(vc, animated: true)
     }
-    */
+    
     @IBAction func contactTeachersPressed(_ sender: Any) {
         
-        getWeekViewHTML()
+        
         //print(reportCardHTML)
-        let vc = ContactTeachersVC()
-        vc.view.backgroundColor = .white
-        vc.title = "Contact Teachers"
-        vc.weekViewHTML = self.weekViewHTML
-        navigationController?.pushViewController(vc, animated: true)
+        DispatchQueue.main.async {
+            let vc = ContactTeachersVC()
+            vc.title = "Contact Teachers"
+            //vc.weekViewHTML = self.weekViewHTML
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     @IBAction func progressReportPressed(_ sender: Any) {
         let vc = progressReportVC()
@@ -156,9 +195,17 @@ class HomeViewController: UIViewController {
     }
     
     
+    @IBAction func transcriptPressed(_ sender: Any) {
+        DispatchQueue.main.async {
+            let vc : UIViewController = transcriptVC()
+            vc.title = "Transcript"
+                  self.navigationController?.pushViewController(vc, animated: true)
+             }
+    }
     
     
     func keepLoggedIn(completion: @escaping (Bool) -> Void) {
+        
         let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
         var DemograhpicsHTML:String = ""
         

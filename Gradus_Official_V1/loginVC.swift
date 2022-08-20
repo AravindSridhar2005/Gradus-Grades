@@ -14,8 +14,9 @@ class loginVC: UIViewController {
     @IBOutlet weak var passwordTF: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserDefaults.standard.set(true, forKey: "ISLOGGEDIN")
-        
+     
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         //print(UserDefaults.standard.object(forKey: "username") as? String)
         //print(UserDefaults.standard.object(forKey: "password") as? String)
     }
@@ -32,8 +33,12 @@ class loginVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "ISLOGGEDIN")
                 UserDefaults.standard.set(username, forKey: "username")
                 UserDefaults.standard.set(password, forKey: "password")
-                UserDefaults.standard.synchronize()
-                //print(UserDefaults.standard.object(forKey: "username") as? String)
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let mainTabBarController = storyboard.instantiateViewController(identifier: "MainTabBarController")
+                    
+                    // This is to get the SceneDelegate object from your view controller
+                    // then call the change root view controller function to change to main tab bar
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(mainTabBarController)
 
             }
             else if response == false {
@@ -42,39 +47,70 @@ class loginVC: UIViewController {
         }
     }
     func verify(username: String, password: String, completion: @escaping (Bool) -> Void){
-        let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
-        
-        var logonHTML:String = ""
-        do {
-            
-            logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
-            let logonDoc = try SwiftSoup.parse(logonHTML)
-            let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
-            let parametersForLogon = ["LogOnDetails.UserName": username, "LogOnDetails.Password": password, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
-            AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
-                let data = String(data: response.data!, encoding: .utf8)
-                do {
-                    let verification_doc = try SwiftSoup.parse(data!)
-                    //if test has this div class, then login is unsucsessful
-                    let test = try verification_doc.select("div.sg-login-container")
-                    
-                    if test.count == 0 {
-                        completion(true)
+        let url = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOffComplete?loginUrl=https%3A%2F%2Fhac.friscoisd.org%2FHomeAccess%2F")
+        AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOffComplete?loginUrl=https%3A%2F%2Fhac.friscoisd.org%2FHomeAccess%2F", method: .get, encoding: URLEncoding()).response {
+            response in
+            let data = String(data: response.data!, encoding: .utf8)
+            //print(data)
+            let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+            var logonHTML:String = ""
+            do {
+                
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                //print(logonHTML)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                let parametersForLogon = ["LogOnDetails.UserName": username, "LogOnDetails.Password": password, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        //print(data)
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        //if test has this div class, then login is unsucsessful
+                        let test = try verification_doc.select("[name=__RequestVerificationToken]")
+                        
+                        print(test.count)
+                        if test.count == 1 {
+                            
+                            completion(false)
+                            var dialogMessage = UIAlertController(title: "Wrong Credentials", message: "Please Enter your correct Username and Password", preferredStyle: .alert)
+                             
+                             // Create OK button with action handler
+                             let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+                                 print("Ok button tapped")
+                              })
+                             
+                             //Add OK button to a dialog message
+                             dialogMessage.addAction(ok)
+                             // Present Alert to
+                             self.present(dialogMessage, animated: true, completion: nil)
+                        }
+                        else {
+                            completion(true)
+                            
+                        }
+                        
                     }
-                    else {
-                        completion(false)
-                        print("hellor")
+                    catch{
+                        
                     }
-                    
-                }
-                catch{
-                    
                 }
             }
-        }
-        catch {
+            catch {
+                
+            }
             
         }
+        
     }
+    
+    
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+   
+
 
 }
+

@@ -8,12 +8,40 @@
 import UIKit
 import SwiftSoup
 import EFAutoScrollLabel
+import DropDown
+import Alamofire
 class BellScheduleVC: UIViewController {
-    var scheduleHTML = UserDefaults.standard.object(forKey: "247070schedule")
+    var scheduleHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
     var classes = [ClassSpecifics]()
-    var yPos = 30.0
+    var semOneADaySchedule = [ClassSpecifics]()
+    var semOneBDaySchedule = [ClassSpecifics]()
+    var semTwoADaySchedule = [ClassSpecifics]()
+    var semTwoBDaySchedule = [ClassSpecifics]()
+    
+    
+    var semOneADayButton = [UIButton]()
+    var semOneBDayButton = [UIButton]()
+    var semTwoADayButton = [UIButton]()
+    var semTwoBDayButton = [UIButton]()
+    var arrayOfLabels = [UILabel]()
     var arrayOfButtons = [UIButton]()
-    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: getScrollingHeight() + 50)
+    var arrayOfEFAutoLabels = [EFAutoScrollLabel]()
+    var advisory = [ClassSpecifics]()
+    
+    
+    @IBOutlet weak var SemesterButton: UIBarButtonItem!
+    
+    
+    @IBAction func navBarClicked(_ sender: Any) {
+        menu.show()
+    }
+    
+    
+    
+    
+    var yPos = 0.0
+    
+    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: getScrollingHeight(sem: "Q1, Q2") + 50)
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
         view.backgroundColor = .white
@@ -24,19 +52,65 @@ class BellScheduleVC: UIViewController {
         view.bounces = true
         return view
     }()
+    var menu: DropDown {
+        let menu = DropDown()
+        menu.dataSource = ["Sem1", "Sem2"]
+        menu.anchorView = SemesterButton
+        menu.selectionAction = { index, title in
+            self.SemesterButton.title = title
+            for label in self.arrayOfEFAutoLabels {
+                label.removeFromSuperview()
+            }
+            for button in self.arrayOfButtons {
+                button.removeFromSuperview()
+            }
+            self.arrayOfEFAutoLabels.removeAll()
+            self.arrayOfButtons.removeAll()
+            var mp = ""
+            if title == "Sem1" {
+                mp = "Q1, Q2"
+            }
+            else {
+                mp = "Q3, Q4"
+            }
+            self.contentViewSize.height = self.getScrollingHeight(sem: mp) + 50
+            self.scrollView.contentSize = self.contentViewSize
+            self.containerView.frame.size = self.contentViewSize
+            self.yPos = 0.0
+            if title == "Sem1" {
+                self.readySem1Labels()
+            }
+            else {
+                self.readySem2Labels()
+            }
+            self.readyAdvisory()
+        }
+        return menu
+    }
     lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.frame.size = contentViewSize
         return view
     }()
-    func getScrollingHeight() -> CGFloat {
+    func getScrollingHeight(sem: String) -> CGFloat {
         var height = 30.0
         do {
             let docS = try SwiftSoup.parse(scheduleHTML as! String)
             let Schedule = try docS.select("table.sg-asp-table").first()
             let elementsOfScedule = try Schedule?.select("tr.sg-asp-table-data-row")
-            height = CGFloat(50.0 * Double(elementsOfScedule?.count ?? 0))
+            
+            var count = 0
+            for element in elementsOfScedule! {
+                let markingPeriods = try element.select("td").get(6).text()
+                print(markingPeriods)
+                if markingPeriods == sem {
+                    count+=1
+                }
+                
+            }
+            count+=1
+            height = CGFloat(50.0 * Double(count))
         }
         catch {
             
@@ -47,64 +121,217 @@ class BellScheduleVC: UIViewController {
         view.addSubview(containerView)
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
+        SemesterButton.title = "Sem1"
         super.viewDidLoad()
         setUp(HTML: scheduleHTML as! String)
-        var periodLabel = UILabel(frame: CGRect(x: view.frame.width * 0 , y: 30.0, width: view.frame.width * 0.2, height: 20))
+        var periodLabel = UILabel(frame: CGRect(x: view.frame.width * 0 , y: 0.0, width: view.frame.width * 0.2, height: 20))
         periodLabel.textAlignment = .center
         periodLabel.text = "Period"
       containerView.addSubview(periodLabel)
-        var courseLabel = UILabel(frame: CGRect(x: view.frame.width * 0.20, y: 30.0, width: view.frame.width * 0.55, height: 20))
+        var courseLabel = UILabel(frame: CGRect(x: view.frame.width * 0.20, y: 0.0, width: view.frame.width * 0.55, height: 20))
         courseLabel.text = "Course Name"
         courseLabel.textAlignment = .center
         containerView.addSubview(courseLabel)
         
-        var daysLabel = UILabel(frame: CGRect(x: view.frame.width * 0.80, y: 30.0, width: view.frame.width * 0.15, height: 20))
+        var daysLabel = UILabel(frame: CGRect(x: view.frame.width * 0.80, y: 0.0, width: view.frame.width * 0.15, height: 20))
         daysLabel.text = "Room"
         daysLabel.textAlignment = .center
         containerView.addSubview(daysLabel)
-        readyLabels()
+        readySem1Labels()
+        readyAdvisory()
         
     }
-    func readyLabels() {
-        for i in 0..<classes.count {
+    func readySem1Labels() {
+        for i in 0..<semOneADaySchedule.count {
             yPos+=50
             let button = UIButton(frame: CGRect(x: 0, y: yPos, width: view.frame.width, height: 30))
 
             button.backgroundColor = .link
             button.layer.cornerRadius = 15
-            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            arrayOfButtons.append(button)
+            button.addTarget(self, action: #selector(buttonAction1A), for: .touchUpInside)
+            semOneADayButton.append(button)
             containerView.addSubview(button)
             var periodLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.0 , y: yPos, width: view.frame.width * 0.15, height: 30))
             periodLabel.textAlignment = .center
-            if classes[i].days.count == 1{
-                periodLabel.text = "\(classes[i].periods)\(classes[i].days)"
-            }
-            else {
-                periodLabel.text = "\(classes[i].periods) - \(classes[i].days) "
-            }
+            periodLabel.text = "\(semOneADaySchedule[i].periods)\(semOneADaySchedule[i].days)"
             periodLabel.textColor = .white
           containerView.addSubview(periodLabel)
             var courseLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.20, y: yPos, width: view.frame.width * 0.55, height: 30))
-            courseLabel.text = classes[i].courseDescription
+            courseLabel.text = semOneADaySchedule[i].courseDescription
             courseLabel.textAlignment = .center
             courseLabel.textColor = .white
             containerView.addSubview(courseLabel)
             
             var daysLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.80, y: yPos, width: view.frame.width * 0.15, height: 30))
-            daysLabel.text = "\(classes[i].room)"
+            daysLabel.text = "\(semOneADaySchedule[i].room)"
             daysLabel.textAlignment = .center
             daysLabel.textColor = .white
             containerView.addSubview(daysLabel)
             
+            arrayOfEFAutoLabels.append(contentsOf: [daysLabel, periodLabel, courseLabel])
         }
+        for i in 0..<semOneBDaySchedule.count {
+            yPos+=50
+            let button = UIButton(frame: CGRect(x: 0, y: yPos, width: view.frame.width, height: 30))
+
+            button.backgroundColor = .link
+            button.layer.cornerRadius = 15
+            button.addTarget(self, action: #selector(buttonAction1B), for: .touchUpInside)
+            semOneBDayButton.append(button)
+            containerView.addSubview(button)
+            var periodLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.0 , y: yPos, width: view.frame.width * 0.15, height: 30))
+            periodLabel.textAlignment = .center
+            periodLabel.text = "\(semOneBDaySchedule[i].periods)\(semOneBDaySchedule[i].days)"
+            periodLabel.textColor = .white
+          containerView.addSubview(periodLabel)
+            var courseLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.20, y: yPos, width: view.frame.width * 0.55, height: 30))
+            courseLabel.text = semOneBDaySchedule[i].courseDescription
+            courseLabel.textAlignment = .center
+            courseLabel.textColor = .white
+            containerView.addSubview(courseLabel)
+            
+            var daysLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.80, y: yPos, width: view.frame.width * 0.15, height: 30))
+            daysLabel.text = "\(semOneBDaySchedule[i].room)"
+            daysLabel.textAlignment = .center
+            daysLabel.textColor = .white
+            containerView.addSubview(daysLabel)
+        
+            arrayOfEFAutoLabels.append(contentsOf: [daysLabel, periodLabel, courseLabel])
+            
+        }
+        
     }
-    @objc func buttonAction(sender:UIButton!) {
+    func readyAdvisory() {
+        yPos+=50
+        let button = UIButton(frame: CGRect(x: 0, y: yPos, width: view.frame.width, height: 30))
+
+        button.backgroundColor = .link
+        button.layer.cornerRadius = 15
+        //button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        //arrayOfButtons.append(button)
+        containerView.addSubview(button)
+        var periodLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.0 , y: yPos, width: view.frame.width * 0.15, height: 30))
+        periodLabel.textAlignment = .center
+        periodLabel.text = "\(advisory[0].periods)\(advisory[0].days)"
+        periodLabel.textColor = .white
+      containerView.addSubview(periodLabel)
+        var courseLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.20, y: yPos, width: view.frame.width * 0.55, height: 30))
+        courseLabel.text = advisory[0].courseDescription
+        courseLabel.textAlignment = .center
+        courseLabel.textColor = .white
+        containerView.addSubview(courseLabel)
+        
+        var daysLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.80, y: yPos, width: view.frame.width * 0.15, height: 30))
+        daysLabel.text = "\(advisory[0].room)"
+        daysLabel.textAlignment = .center
+        daysLabel.textColor = .white
+        containerView.addSubview(daysLabel)
+    
+        arrayOfEFAutoLabels.append(contentsOf: [daysLabel, periodLabel, courseLabel])
+    }
+    func readySem2Labels() {
+        for i in 0..<semTwoADaySchedule.count {
+            yPos+=50
+            let button = UIButton(frame: CGRect(x: 0, y: yPos, width: view.frame.width, height: 30))
+
+            button.backgroundColor = .link
+            button.layer.cornerRadius = 15
+            button.addTarget(self, action: #selector(buttonAction2A), for: .touchUpInside)
+            semTwoADayButton.append(button)
+            containerView.addSubview(button)
+            var periodLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.0 , y: yPos, width: view.frame.width * 0.15, height: 30))
+            periodLabel.textAlignment = .center
+            periodLabel.text = "\(semTwoADaySchedule[i].periods)\(semTwoADaySchedule[i].days)"
+            periodLabel.textColor = .white
+          containerView.addSubview(periodLabel)
+            var courseLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.20, y: yPos, width: view.frame.width * 0.55, height: 30))
+            courseLabel.text = semTwoADaySchedule[i].courseDescription
+            courseLabel.textAlignment = .center
+            courseLabel.textColor = .white
+            containerView.addSubview(courseLabel)
+            
+            var daysLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.80, y: yPos, width: view.frame.width * 0.15, height: 30))
+            daysLabel.text = "\(semTwoADaySchedule[i].room)"
+            daysLabel.textAlignment = .center
+            daysLabel.textColor = .white
+            containerView.addSubview(daysLabel)
+            
+            arrayOfEFAutoLabels.append(contentsOf: [daysLabel, periodLabel, courseLabel])
+        }
+        for i in 0..<semTwoBDaySchedule.count {
+            yPos+=50
+            let button = UIButton(frame: CGRect(x: 0, y: yPos, width: view.frame.width, height: 30))
+
+            button.backgroundColor = .link
+            button.layer.cornerRadius = 15
+            button.addTarget(self, action: #selector(buttonAction2B), for: .touchUpInside)
+            semTwoBDayButton.append(button)
+            containerView.addSubview(button)
+            var periodLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.0 , y: yPos, width: view.frame.width * 0.15, height: 30))
+            periodLabel.textAlignment = .center
+            periodLabel.text = "\(semTwoBDaySchedule[i].periods)\(semTwoBDaySchedule[i].days)"
+            periodLabel.textColor = .white
+          containerView.addSubview(periodLabel)
+            var courseLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.20, y: yPos, width: view.frame.width * 0.55, height: 30))
+            courseLabel.text = semTwoBDaySchedule[i].courseDescription
+            courseLabel.textAlignment = .center
+            courseLabel.textColor = .white
+            containerView.addSubview(courseLabel)
+            
+            var daysLabel = EFAutoScrollLabel(frame: CGRect(x: view.frame.width * 0.80, y: yPos, width: view.frame.width * 0.15, height: 30))
+            daysLabel.text = "\(semTwoBDaySchedule[i].room)"
+            daysLabel.textAlignment = .center
+            daysLabel.textColor = .white
+            containerView.addSubview(daysLabel)
+        
+            arrayOfEFAutoLabels.append(contentsOf: [daysLabel, periodLabel, courseLabel])        }
+        
+    }
+    @objc func buttonAction1A(sender:UIButton!) {
        
-        if arrayOfButtons.contains(sender) {
-            var i = arrayOfButtons.firstIndex(of: sender)!
+        if semOneADayButton.contains(sender) {
+            var i = semOneADayButton.firstIndex(of: sender)!
             let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "schedulePopOver") as! schedulePopOverVC
-            popOverVC.classSpecfic = classes[i]
+            popOverVC.classSpecfic = semOneADaySchedule[i]
+            self.addChild(popOverVC)
+            popOverVC.view.frame = self.view.frame
+            self.view.addSubview(popOverVC.view)
+            popOverVC.didMove(toParent: self)
+            
+        }
+      }
+    @objc func buttonAction1B(sender:UIButton!) {
+       
+        if semOneBDayButton.contains(sender) {
+            var i = semOneBDayButton.firstIndex(of: sender)!
+            let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "schedulePopOver") as! schedulePopOverVC
+            popOverVC.classSpecfic = semOneBDaySchedule[i]
+            self.addChild(popOverVC)
+            popOverVC.view.frame = self.view.frame
+            self.view.addSubview(popOverVC.view)
+            popOverVC.didMove(toParent: self)
+            
+        }
+      }
+    @objc func buttonAction2A(sender:UIButton!) {
+       
+        if semTwoADayButton.contains(sender) {
+            var i = semTwoADayButton.firstIndex(of: sender)!
+            let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "schedulePopOver") as! schedulePopOverVC
+            popOverVC.classSpecfic = semTwoADaySchedule[i]
+            self.addChild(popOverVC)
+            popOverVC.view.frame = self.view.frame
+            self.view.addSubview(popOverVC.view)
+            popOverVC.didMove(toParent: self)
+            
+        }
+      }
+    @objc func buttonAction2B(sender:UIButton!) {
+       
+        if semTwoBDayButton.contains(sender) {
+            var i = semTwoBDayButton.firstIndex(of: sender)!
+            let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "schedulePopOver") as! schedulePopOverVC
+            popOverVC.classSpecfic = semTwoBDaySchedule[i]
             self.addChild(popOverVC)
             popOverVC.view.frame = self.view.frame
             self.view.addSubview(popOverVC.view)
@@ -134,22 +361,107 @@ class BellScheduleVC: UIViewController {
                 let status = try elements.select("td").get(8).text()
                 let classSpecifics = ClassSpecifics(course: course, courseDescription: courseDescription, periods: periods, teacherName: teacherName, room: room, days: days, markingPeriods: markingPeriods, buiding: building, status: status)
                 classes.append(classSpecifics)
-                print(classSpecifics)
+                if (markingPeriods == "Q1, Q2"){
+                    if days == "A" {
+                        semOneADaySchedule.append(classSpecifics)
+                    } else {
+                        semOneBDaySchedule.append(classSpecifics)
+                    }
+                }
+                else {
+                    if days == "A" {
+                        semTwoADaySchedule.append(classSpecifics)
+                    } else if days == "B"{
+                        semTwoBDaySchedule.append(classSpecifics)
+                    }
+                }
+                if(markingPeriods == "Q1, Q2, Q3, Q4"){
+                    advisory.append(classSpecifics)
+                }
             }
         }
         catch {
             
         }
     }
+    var refreshControl = UIRefreshControl()
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            //refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+            scrollView.refreshControl = refreshControl
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        }
 
-    /*
-    // MARK: - Navigation
+        @objc func refresh()
+        {
+            for label in arrayOfLabels {
+                label.removeFromSuperview()
+            }
+            arrayOfLabels.removeAll()
+            for button in arrayOfButtons {
+                button.removeFromSuperview()
+            }
+            arrayOfButtons.removeAll()
+            self.semOneADaySchedule.removeAll()
+            self.semTwoADaySchedule.removeAll()
+            self.semOneBDaySchedule.removeAll()
+            self.semTwoBDaySchedule.removeAll()
+            self.classes.removeAll()
+            for button in arrayOfEFAutoLabels {
+                button.removeFromSuperview()
+            }
+            arrayOfEFAutoLabels.removeAll()
+            
+            yPos = 0.0
+            getScheduleHTML() {
+                response in
+                self.setUp(HTML: response)
+                self.readySem1Labels()
+                self.readyAdvisory()
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+                print(response)
+            }
+            
+            
+            refreshControl.endRefreshing()
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        }
+    func getScheduleHTML(completion: @escaping (String) -> Void) {
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        let scheduleURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Classes.aspx")
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else {
+                completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
+            }
+        }
+        catch {
+            
+        }
     }
-    */
-
 }

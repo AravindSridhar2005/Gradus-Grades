@@ -13,30 +13,50 @@ class reportCardVC: UIViewController {
     
     @IBOutlet weak var selectedMPButton: UIBarButtonItem!
     var arrayOfLabels = [UILabel]()
+    var arrayOfHeaderLabels = [UILabel]()
     var currentMP = ""
     var username = "247070"
+    var isReportCardThere = true
     var menu: DropDown {
         let menu = DropDown()
-        menu.dataSource = ["1","2","3","4"]
-        menu.anchorView = selectedMPButton
-        menu.selectionAction = { index, title in
-            self.selectedMPButton.title = title
-            for button in self.arrayOfInvsisibleButtons {
-                button.removeFromSuperview()
+        if isReportCardThere {
+            do {
+                let docRC = try SwiftSoup.parse(reportCardHTML as! String)
+                let mpElements = try docRC.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
+
+                for element in mpElements{
+                    menu.dataSource.append(try element.text())
+                }
             }
-            self.arrayOfInvsisibleButtons.removeAll()
-            for label in self.arrayOfLabels {
-                label.removeFromSuperview()
+            catch {
+                
             }
-            self.arrayOfLabels.removeAll()
-            self.arrayOfReportCardClasses.removeAll()
-            var temp = self.getNewHTMl(mp: title, isRefresh: false)
-            self.ypos = 30.0
-            self.setUp(HTML: temp)
-            self.contentViewSize.height = self.getScrollHeight() + 50
-            self.scrollView.contentSize = self.contentViewSize
-            self.containerView.frame.size = self.contentViewSize
-            self.readyLabels()
+            menu.anchorView = selectedMPButton
+            menu.selectionAction = { index, title in
+                self.selectedMPButton.title = title
+                for button in self.arrayOfInvsisibleButtons {
+                    button.removeFromSuperview()
+                }
+                for label in self.arrayOfHeaderLabels {
+                    label.removeFromSuperview()
+                }
+                self.arrayOfHeaderLabels.removeAll()
+                self.arrayOfInvsisibleButtons.removeAll()
+                for label in self.arrayOfLabels {
+                    label.removeFromSuperview()
+                }
+                self.arrayOfLabels.removeAll()
+                self.arrayOfReportCardClasses.removeAll()
+                var temp = self.getNewHTMl(mp: title, isRefresh: false)
+                self.ypos = 30.0
+                self.setUp(HTML: temp)
+                self.contentViewSize.height = self.getScrollHeight() + 50
+                self.scrollView.contentSize = self.contentViewSize
+                self.containerView.frame.size = self.contentViewSize
+                self.readyLabels(mp: title)
+                self.setUpHeaderLabels(mp: title)
+            }
+            
         }
         return menu
     }
@@ -48,10 +68,11 @@ class reportCardVC: UIViewController {
     
     var ypos = 30.0
     //var username = UserDefaults.standard.object(forKey: "currentusername")
-    var reportCardHTML = UserDefaults.standard.object(forKey: "247070RC") as? String
+    var reportCardHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC") as? String
+               
     var arrayOfInvsisibleButtons = [UIButton]()
     var arrayOfReportCardClasses = [ReportCardObject]()
-    lazy var contentViewSize = CGSize(width: self.view.frame.width + 100, height: getScrollHeight() + 50)
+    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: getScrollHeight() + 50)
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
         view.backgroundColor = .white
@@ -73,7 +94,7 @@ class reportCardVC: UIViewController {
         do {
             let docRC = try SwiftSoup.parse(reportCardHTML as! String)
             let rand = try docRC.select("tr.sg-asp-table-data-row")
-            height = CGFloat(ypos + (50.0 * Double(rand.count)))
+            height = CGFloat(ypos + (50.0 * 9))
         }
         catch {
             
@@ -84,64 +105,190 @@ class reportCardVC: UIViewController {
         super.viewDidLoad()
         
         
-        view.addSubview(containerView)
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
         do {
-            let docRC = try SwiftSoup.parse(reportCardHTML as! String)
-            let mpElements = try docRC.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
-
-            for element in mpElements{
-                if element.hasAttr("selected") {
-                    currentMP = try element.text()
-                    selectedMPButton.title = "4"
-                }
+            //print(reportCardHTML)
+            let doc = try SwiftSoup.parse(reportCardHTML ?? "")
+            let label = try doc.select("#plnMain_lblMessage").text()
+            if label == "This student does not have any Report Cards for this school year." {
+                isReportCardThere = false
+                selectedMPButton.title = ""
             }
+            
         }
         catch {
             
         }
-        var courseLabel = UILabel(frame: CGRect(x: 0, y: 30, width: ((view.frame.width+100) * 0.35), height: 49))
-        courseLabel.center.y = 30.0
-        courseLabel.textAlignment = .center
-        courseLabel.text = "Course Name"
-        var q1Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.35, y: 30, width: (view.frame.width+100) * 0.1, height: 49))
-        q1Label.center.y = 30.0
-        q1Label.textAlignment = .center
-        q1Label.text = "Q1"
-        var q2Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.45, y: 30, width: (view.frame.width+100) * 0.1, height: 49))
-        q2Label.center.y = 30.0
-        q2Label.textAlignment = .center
-        q2Label.text = "Q2"
-        var sem1Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.55, y: 30, width: (view.frame.width+100) * 0.1, height: 49))
-        sem1Label.center.y = 30.0
-        sem1Label.textAlignment = .center
-        sem1Label.text = "Sem1"
-        var q3Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.65, y: 30, width: (view.frame.width+100) * 0.1, height: 49))
-        q3Label.center.y = 30.0
-        q3Label.textAlignment = .center
-        q3Label.text = "Q3"
-        var q4Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.75, y: 30, width: (view.frame.width+100) * 0.1, height: 49))
-        q4Label.center.y = 30.0
-        q4Label.textAlignment = .center
-        q4Label.text = "Q4"
-        var sem2Label = UILabel(frame: CGRect(x: (view.frame.width+100) * 0.85, y: 30, width: (view.frame.width+100) * 0.15, height: 49))
-        sem2Label.center.y = 30.0
-        sem2Label.textAlignment = .center
-        sem2Label.text = "Sem2"
-        containerView.addSubview(courseLabel)
-        containerView.addSubview(q1Label)
-        containerView.addSubview(q2Label)
-        containerView.addSubview(sem1Label)
-        containerView.addSubview(q3Label)
-        containerView.addSubview(q4Label)
-        containerView.addSubview(sem2Label)
-        setUp(HTML: reportCardHTML ?? "")
-        readyLabels()
+        if isReportCardThere {
+            view.addSubview(containerView)
+            view.addSubview(scrollView)
+            scrollView.addSubview(containerView)
+            do {
+                let docRC = try SwiftSoup.parse(reportCardHTML as! String)
+                let mpElements = try docRC.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
+
+                for element in mpElements{
+                    if element.hasAttr("selected") {
+                        currentMP = try element.text()
+                        selectedMPButton.title = currentMP
+                    }
+                }
+                print(try docRC.select("#plnMain_lblMessage").text())
+            }
+            catch {
+                
+            }
+        
+            setUpHeaderLabels(mp: currentMP)
+            setUp(HTML: reportCardHTML ?? "")
+            readyLabels(mp: currentMP)
+        }
+    }
+    func setUpHeaderLabels(mp: String) {
+        if mp == "1" || mp == "2" {
+            var courseLabel = UILabel(frame: CGRect(x: 0, y: 30, width: ((view.frame.width) * 0.45), height: 49))
+            courseLabel.center.y = 30.0
+            courseLabel.textAlignment = .center
+            courseLabel.text = "Course Name"
+            var q1Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.55, y: 30, width: (view.frame.width) * 0.1, height: 49))
+            q1Label.center.y = 30.0
+            q1Label.textAlignment = .center
+            q1Label.text = "Q1"
+            var q2Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.65, y: 30, width: (view.frame.width) * 0.1, height: 49))
+            q2Label.center.y = 30.0
+            q2Label.textAlignment = .center
+            q2Label.text = "Q2"
+            var sem1Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.75, y: 30, width: (view.frame.width) * 0.15, height: 49))
+            sem1Label.center.y = 30.0
+            sem1Label.textAlignment = .center
+            sem1Label.text = "Sem2"
+            containerView.addSubview(courseLabel)
+            containerView.addSubview(q1Label)
+            containerView.addSubview(q2Label)
+            containerView.addSubview(sem1Label)
+            arrayOfHeaderLabels.append(contentsOf: [courseLabel, sem1Label, q1Label, q2Label])
+        }
+        else if mp == "3" || mp == "4" {
+            var courseLabel = UILabel(frame: CGRect(x: 0, y: 30, width: ((view.frame.width) * 0.45), height: 49))
+            courseLabel.center.y = 30.0
+            courseLabel.textAlignment = .center
+            courseLabel.text = "Course Name"
+            var q3Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.55, y: 30, width: (view.frame.width) * 0.1, height: 49))
+            q3Label.center.y = 30.0
+            q3Label.textAlignment = .center
+            q3Label.text = "Q3"
+            var q4Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.65, y: 30, width: (view.frame.width) * 0.1, height: 49))
+            q4Label.center.y = 30.0
+            q4Label.textAlignment = .center
+            q4Label.text = "Q4"
+            var sem2Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.75, y: 30, width: (view.frame.width) * 0.15, height: 49))
+            sem2Label.center.y = 30.0
+            sem2Label.textAlignment = .center
+            sem2Label.text = "Sem2"
+            containerView.addSubview(courseLabel)
+            containerView.addSubview(q3Label)
+            containerView.addSubview(q4Label)
+            containerView.addSubview(sem2Label)
+            arrayOfHeaderLabels.append(contentsOf: [courseLabel, sem2Label, q3Label, q4Label])
+
+        }
+         
+    }
+    func readyLabels(mp: String) {
+        if mp == "1" || mp == "2" {
+            for i in 0..<arrayOfReportCardClasses.count {
+                
+                if arrayOfReportCardClasses[i].q1 != "" {
+                    ypos+=50.0
+                    var button = UIButton(frame: CGRect(x: 0, y: 30, width: ((view.frame.width)), height: 30))
+                    button.center.y = ypos
+                    button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+                    button.layer.cornerRadius = button.frame.height / 2
+                    button.backgroundColor = .link
+                    //button.setValue(arrayOfReportCardClasses[i], forKey: "need")
+                    arrayOfInvsisibleButtons.append(button)
+                    
+                    var courseLabel = UILabel(frame: CGRect(x: 0, y: 30, width: ((view.frame.width) * 0.45), height: 49))
+                    courseLabel.center.y = ypos
+                    courseLabel.textAlignment = .center
+                    courseLabel.text = arrayOfReportCardClasses[i].Description
+                    courseLabel.textColor = .white
+                    
+                    var q1Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.55, y: 30, width: (view.frame.width) * 0.1, height: 49))
+                    q1Label.center.y = ypos
+                    q1Label.textAlignment = .center
+                    q1Label.text = arrayOfReportCardClasses[i].q1
+                    q1Label.textColor = .white
+                    var q2Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.65, y: 30, width: (view.frame.width) * 0.1, height: 49))
+                    q2Label.center.y = ypos
+                    q2Label.textAlignment = .center
+                    q2Label.text = arrayOfReportCardClasses[i].q2
+                    q2Label.textColor = .white
+                    var sem1Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.75, y: 30, width: (view.frame.width) * 0.15, height: 49))
+                    sem1Label.center.y = ypos
+                    sem1Label.textAlignment = .center
+                    sem1Label.text = arrayOfReportCardClasses[i].sem1
+                    sem1Label.textColor = .white
+                    containerView.addSubview(button)
+                    containerView.addSubview(courseLabel)
+                    containerView.addSubview(q1Label)
+                    containerView.addSubview(q2Label)
+                    containerView.addSubview(sem1Label)
+                    
+                    arrayOfLabels.append(contentsOf: [courseLabel, q1Label, q2Label, sem1Label])
+                }
+            }
+        }
+        else if mp == "3" || mp == "4" {
+            for i in 0..<arrayOfReportCardClasses.count {
+                
+                if arrayOfReportCardClasses[i].q1 == "" {
+                    ypos+=50.0
+                    var button = UIButton(frame: CGRect(x: 0, y: 30, width: ((view.frame.width)), height: 30))
+                    button.center.y = ypos
+                    button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+                    
+                    button.layer.cornerRadius = button.frame.height / 2
+                    button.backgroundColor = .link
+                    
+                    //button.setValue(arrayOfReportCardClasses[i], forKey: "need")
+                    arrayOfInvsisibleButtons.append(button)
+                    var courseLabel = UILabel(frame: CGRect(x: 0, y: 30, width: ((view.frame.width) * 0.45), height: 49))
+                    courseLabel.center.y = ypos
+                    courseLabel.textAlignment = .center
+                    courseLabel.text = arrayOfReportCardClasses[i].Description
+                    courseLabel.textColor = .white
+                    
+                    var q3Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.55, y: 30, width: (view.frame.width) * 0.1, height: 49))
+                    q3Label.center.y = ypos
+                    q3Label.textAlignment = .center
+                    q3Label.text = arrayOfReportCardClasses[i].q3
+                    q3Label.textColor = .white
+                    var q4Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.65, y: 30, width: (view.frame.width) * 0.1, height: 49))
+                    q4Label.center.y = ypos
+                    q4Label.textAlignment = .center
+                    q4Label.text = arrayOfReportCardClasses[i].q4
+                    q4Label.textColor = .white
+                    var sem2Label = UILabel(frame: CGRect(x: (view.frame.width) * 0.75, y: 30, width: (view.frame.width) * 0.15, height: 49))
+                    sem2Label.center.y = ypos
+                    sem2Label.textAlignment = .center
+                    sem2Label.text = arrayOfReportCardClasses[i].sem2
+                    sem2Label.textColor = .white
+                    //containerView.addSubview(button)
+                    containerView.addSubview(button)
+                    containerView.addSubview(courseLabel)
+                    containerView.addSubview(q3Label)
+                    containerView.addSubview(q4Label)
+                    containerView.addSubview(sem2Label)
+                    
+                    arrayOfLabels.append(contentsOf: [courseLabel, q3Label, q4Label, sem2Label])
+                }
+            }
+        }
     }
     func readyLabels() {
         for i in 0..<arrayOfReportCardClasses.count {
             ypos+=50.0
+            print(arrayOfReportCardClasses[i].q1)
             var button = UIButton(frame: CGRect(x: 0, y: 30, width: ((view.frame.width+100)), height: 49))
             button.center.y = ypos
             button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -311,24 +458,28 @@ class reportCardVC: UIViewController {
         @objc func refresh()
         {
             let mp = selectedMPButton.title
-            var tempHTML = getNewHTMl(mp: mp!, isRefresh: true)
             for button in self.arrayOfInvsisibleButtons {
                 button.removeFromSuperview()
             }
+            for label in self.arrayOfHeaderLabels {
+                label.removeFromSuperview()
+            }
+            self.arrayOfHeaderLabels.removeAll()
             self.arrayOfInvsisibleButtons.removeAll()
             for label in self.arrayOfLabels {
                 label.removeFromSuperview()
             }
             self.arrayOfLabels.removeAll()
             self.arrayOfReportCardClasses.removeAll()
-            ypos = 30.0
-            //need to make request to HAC Here
-            self.setUp(HTML: tempHTML)
-            readyLabels()
-            
-            // Code to refresh table view
+            var temp = self.getNewHTMl(mp: selectedMPButton.title!, isRefresh: false)
+            self.ypos = 30.0
+            self.setUp(HTML: temp)
+            self.contentViewSize.height = self.getScrollHeight() + 50
+            self.scrollView.contentSize = self.contentViewSize
+            self.containerView.frame.size = self.contentViewSize
+            self.readyLabels(mp: selectedMPButton.title!)
+            self.setUpHeaderLabels(mp: selectedMPButton.title!)
             refreshControl.endRefreshing()
-
         }
-
+        
 }
