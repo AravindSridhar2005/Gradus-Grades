@@ -18,27 +18,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="104" translatesAutoresizingMaskIntoConstraints="NO" id="YTP-x4-XaT">
-                                <rect key="frame" x="125" y="211" width="164" height="474.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gradus" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QE8-DL-4ek">
+                                <rect key="frame" x="20" y="88" width="374" height="63.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="53"/>
+                                <color key="textColor" name="AccentColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="70e-6W-BOP">
+                                <rect key="frame" x="89.5" y="372.5" width="235" height="151"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gradus" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QE8-DL-4ek">
-                                        <rect key="frame" x="0.0" y="0.0" width="164" height="63.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="53"/>
-                                        <color key="textColor" name="AccentColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Asj-ZI-QFo">
-                                        <rect key="frame" x="35" y="167.5" width="94" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="235" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="235" id="JdT-Tu-hEV"/>
+                                            <constraint firstAttribute="height" constant="40" id="UoI-SS-koj"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K2c-U9-XHA">
-                                        <rect key="frame" x="37" y="305.5" width="90.5" height="34"/>
+                                        <rect key="frame" x="0.0" y="60" width="235" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="k4U-xg-bd8"/>
+                                            <constraint firstAttribute="width" constant="235" id="kLh-hS-njP"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="go"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="GoPressed:" destination="0Px-qd-xbN" eventType="primaryActionTriggered" id="6Yg-xe-6aU"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjP-vY-LRn">
-                                        <rect key="frame" x="47" y="443.5" width="70" height="31"/>
+                                        <rect key="frame" x="82.5" y="120" width="70" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Submit"/>
                                         <connections>
@@ -51,19 +62,23 @@
                         <viewLayoutGuide key="safeArea" id="9IN-2M-hFX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="YTP-x4-XaT" firstAttribute="centerY" secondItem="83p-Ck-kjU" secondAttribute="centerY" id="bpa-rB-Ecw"/>
-                            <constraint firstItem="YTP-x4-XaT" firstAttribute="centerX" secondItem="83p-Ck-kjU" secondAttribute="centerX" id="tc8-bM-9HE"/>
+                            <constraint firstItem="QE8-DL-4ek" firstAttribute="top" secondItem="9IN-2M-hFX" secondAttribute="top" id="7d9-cg-Fwq"/>
+                            <constraint firstItem="9IN-2M-hFX" firstAttribute="trailing" secondItem="QE8-DL-4ek" secondAttribute="trailing" constant="20" id="Xao-pQ-BHS"/>
+                            <constraint firstItem="70e-6W-BOP" firstAttribute="centerY" secondItem="83p-Ck-kjU" secondAttribute="centerY" id="Yye-yJ-mbN"/>
+                            <constraint firstItem="70e-6W-BOP" firstAttribute="centerX" secondItem="83p-Ck-kjU" secondAttribute="centerX" id="ZuU-ci-D9b"/>
+                            <constraint firstItem="QE8-DL-4ek" firstAttribute="leading" secondItem="9IN-2M-hFX" secondAttribute="leading" constant="20" id="qPk-B4-AVk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="j6t-1l-0p2"/>
                     <connections>
                         <outlet property="passwordTF" destination="K2c-U9-XHA" id="9Vd-m7-eAG"/>
+                        <outlet property="submitButton" destination="NjP-vY-LRn" id="LVp-zr-yeF"/>
                         <outlet property="usernameTF" destination="Asj-ZI-QFo" id="DLF-ue-wSJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6xO-ap-qC7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-804" y="-722"/>
+            <point key="canvasLocation" x="-804.34782608695662" y="-722.54464285714278"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="rdI-Fa-ocu">
@@ -332,7 +347,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nzv-RI-t8X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-736.23188405797111" y="1202.6785714285713"/>
+            <point key="canvasLocation" x="-749" y="1213"/>
         </scene>
         <!--Progress Report-->
         <scene sceneID="8Tp-Uw-Lus">
@@ -447,6 +462,7 @@
                         <outlet property="absencesLabel" destination="1ZM-Cb-nVR" id="qMc-nI-vbs"/>
                         <outlet property="roomLabel" destination="NOJ-jW-CY1" id="bGz-hW-rPM"/>
                         <outlet property="tardiesLabel" destination="ZYo-vq-eHj" id="1wg-91-v7f"/>
+                        <outlet property="tempview" destination="HwA-fR-8nK" id="MxA-ZQ-QqG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jFK-5X-383" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -661,7 +677,7 @@
                         <outlet property="TeacherLabel" destination="MX5-bh-NwV" id="1rF-xk-9q8"/>
                         <outlet property="buildingLabel" destination="Yq0-bR-8yb" id="Xaz-DG-HEF"/>
                         <outlet property="roomLabel" destination="Ybp-2X-dSe" id="Nrs-N4-69l"/>
-                        <outlet property="tempview" destination="EIe-Io-w0M" id="fHh-AR-CD1"/>
+                        <outlet property="tempview" destination="tJg-rL-IOJ" id="4Zd-1j-tSv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AhF-d1-9Ym" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

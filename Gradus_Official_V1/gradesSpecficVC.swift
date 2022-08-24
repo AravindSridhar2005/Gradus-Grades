@@ -17,6 +17,7 @@ class gradesSpecficVC: UIViewController {
     var arrayOfNonGraded = [Assignment]()
     var arrayOfMajorButtons = [UIButton]()
     var arrayOfMinorButtons = [UIButton]()
+    var arrayOfNonGradedButtons = [UIButton]()
     var courseName = ""
     var dict = [String: Assignment]()
     var MajorLabel = UILabel()
@@ -43,7 +44,7 @@ class gradesSpecficVC: UIViewController {
         return view
     }()
     func scrollHeight() -> CGFloat {
-        var height = 80.0 + (60.0 * Double(arrayOfAssignments.count)) + 100
+        var height = 80.0 + (80.0 * Double(arrayOfAssignments.count)) + 200
         return height
     }
     override func viewDidLoad() {
@@ -82,7 +83,7 @@ class gradesSpecficVC: UIViewController {
             containerView.addSubview(label)
             //
         }
-        
+        /*
         else if arrayOfMajorGrades.count == 0 && arrayOfMinorGrades.count == 0 {
             var NGLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 49))
             //MinorLabel.center.x = self.containerView.center.x
@@ -127,11 +128,28 @@ class gradesSpecficVC: UIViewController {
             setUpMinorGrades(arrayOfMinorGrades: arrayOfMinorGrades, majorIsEmpty: false)
         }
         
-        
+        */
+        setUpMajorGrades(arrayOfMajorGrades: arrayOfMajorGrades)
+        if arrayOfMajorGrades.count != 0 {
+            ypos+=50
+        }
+        setUpMinorGrades(arrayOfMinorGrades: arrayOfMinorGrades, majorIsEmpty: false)
+        if arrayOfMinorGrades.count != 0 {
+            ypos+=50
+        }
+        setUpNonGraded(arrayOfNonGraded: arrayOfNonGraded, MinorIsEmpty: false)
     }
     
     func setUpMajorGrades(arrayOfMajorGrades: [Assignment]) {
         for i in 0..<arrayOfMajorGrades.count {
+            if i == 0 {
+                MajorLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 49))
+                //MajorLabel.center.x = self.containerView.center.x
+                MajorLabel.textAlignment = .center
+                MajorLabel.text = "Major Grades"
+                MajorLabel.font = MajorLabel.font.withSize(30)
+                containerView.addSubview(MajorLabel)
+            }
             ypos += 60
             var button = UIButton(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 20))
             button.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
@@ -185,7 +203,10 @@ class gradesSpecficVC: UIViewController {
             var i = arrayOfMinorButtons.firstIndex(of: sender)
             popOverVC.assignment = arrayOfMinorGrades[i!]
         }
-        
+        if arrayOfNonGradedButtons.contains(sender) {
+            var i = arrayOfNonGradedButtons.firstIndex(of: sender)
+            popOverVC.assignment = arrayOfNonGraded[i!]
+        }
         self.addChild(popOverVC)
         popOverVC.view.frame = self.view.frame
         self.view.addSubview(popOverVC.view)
@@ -193,9 +214,59 @@ class gradesSpecficVC: UIViewController {
       }
 
     func setUpNonGraded(arrayOfNonGraded: [Assignment], MinorIsEmpty: Bool) {
-                        
+        for i in 0..<arrayOfNonGraded.count {
+            if i == 0 {
+                MinorLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 49))
+                MinorLabel.textAlignment = .center
+                MinorLabel.text = "Non Graded"
+                MinorLabel.font = MinorLabel.font.withSize(30)
+                containerView.addSubview(MinorLabel)
+            }
+            ypos += 60
+            var button = UIButton(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 20))
+            button.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
+            arrayOfNonGradedButtons.append(button)
+            containerView.addSubview(button)
+            if i != 0 {
+                var lineView = UIView(frame: CGRect(x: view.frame.width * 0.05, y: ypos-25.0, width: view.frame.width*0.9, height: 1))
+                lineView.backgroundColor = .lightGray
+                containerView.addSubview(lineView)
+            }
+            var nameLabel = UILabel(frame: CGRect(x: 15, y: ypos, width: view.frame.width * 0.7 , height: 20))
+            nameLabel.text = arrayOfNonGraded[i].assName
+            nameLabel.textColor = .black
+            nameLabel.textAlignment = .left
+            containerView.addSubview(nameLabel)
+            var gradeLabel = UILabel(frame: CGRect(x: view.frame.width * 0.80, y: ypos, width: view.frame.width * 0.20 - 15 , height: 20))
+            gradeLabel.text = arrayOfNonGraded[i].score
+            gradeLabel.textColor = .black
+            gradeLabel.textAlignment = .center
+            containerView.addSubview(gradeLabel)
+            if arrayOfNonGraded[i].totalPts != "100.00" {
+                var totalPts = UILabel(frame: CGRect(x: view.frame.width * 0.80, y: ypos+20, width: view.frame.width * 0.2 , height: 10))
+                totalPts.text = "/\(arrayOfNonGraded[i].totalPts)"
+                totalPts.textAlignment = .center
+                totalPts.textColor = .black
+                totalPts.font = totalPts.font.withSize(12.0)
+                containerView.addSubview(totalPts)
+
+            }
+            var dateLabel = UILabel(frame: CGRect(x: 17, y: ypos+20, width: view.frame.width * 0.4 , height: 15))
+            if arrayOfNonGraded[i].weight == "1.00"{
+                dateLabel.text = arrayOfNonGraded[i].dateDue
+            }
+            else {
+                dateLabel.text = "\(arrayOfNonGraded[i].dateDue) | Weight: \(arrayOfNonGraded[i].weight)"
+            }
+            dateLabel.textAlignment = .left
+            dateLabel.textColor = .black
+            dateLabel.font = dateLabel.font.withSize(12.0)
+            containerView.addSubview(dateLabel)
+            
+        }
     }
     func setUpMinorGrades(arrayOfMinorGrades: [Assignment], majorIsEmpty: Bool) {
+        /*
         if majorIsEmpty == false {
             ypos += 50
             MinorLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 49))
@@ -207,8 +278,16 @@ class gradesSpecficVC: UIViewController {
             containerView.addSubview(MinorLabel)
             
         }
+         */
         
         for i in 0..<arrayOfMinorGrades.count {
+            if i == 0 {
+                MinorLabel = UILabel(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 49))
+                MinorLabel.textAlignment = .center
+                MinorLabel.text = "Minor Grades"
+                MinorLabel.font = MinorLabel.font.withSize(30)
+                containerView.addSubview(MinorLabel)
+            }
             ypos += 60
             var button = UIButton(frame: CGRect(x: 0, y: ypos, width: view.frame.width, height: 20))
             button.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)

@@ -28,7 +28,7 @@ class gradePopOverVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        tempview.layer.cornerRadius = 20
+        tempview.layer.cornerRadius = (tempview.frame.height / 3) - 10
         label1.text = "Date Assigned: \(assignment.dateAss)"
         label2.text = "Date Due: \(assignment.dateDue)"
         label3.text = "Weight: \(assignment.weight)"

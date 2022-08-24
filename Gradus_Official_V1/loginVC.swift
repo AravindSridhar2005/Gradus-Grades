@@ -12,19 +12,33 @@ class loginVC: UIViewController {
 
     @IBOutlet weak var usernameTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
+
+    
+    
+    
+    
     override func viewDidLoad() {
+        
+
         super.viewDidLoad()
      
+        
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+    
         //print(UserDefaults.standard.object(forKey: "username") as? String)
         //print(UserDefaults.standard.object(forKey: "password") as? String)
     }
+    @IBOutlet weak var submitButton: UIButton!
     
     
     @IBAction func submitPressed(_ sender: Any) {
+        print("Hello")
+        submitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "submitPressed"))
         //print(UserDefaults.standard.object(forKey: "username") as? String)
         //when submit button is pressed
+        view.endEditing(true)
         let username = usernameTF.text!
         let password = passwordTF.text!
         verify(username: username, password: password) {
@@ -35,6 +49,7 @@ class loginVC: UIViewController {
                 UserDefaults.standard.set(password, forKey: "password")
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let mainTabBarController = storyboard.instantiateViewController(identifier: "MainTabBarController")
+                
                     
                     // This is to get the SceneDelegate object from your view controller
                     // then call the change root view controller function to change to main tab bar
@@ -104,6 +119,10 @@ class loginVC: UIViewController {
         
     }
     
+    @IBAction func GoPressed(_ sender: UITextField) {
+        self.view.endEditing(true)
+        submitPressed(sender)
+    }
     
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.

@@ -9,13 +9,14 @@ import UIKit
 import SwiftSoup
 import DropDown
 import EFAutoScrollLabel
+import Alamofire
 class reportCardVC: UIViewController {
     
     @IBOutlet weak var selectedMPButton: UIBarButtonItem!
     var arrayOfLabels = [UILabel]()
     var arrayOfHeaderLabels = [UILabel]()
     var currentMP = ""
-    var username = "247070"
+
     var isReportCardThere = true
     var menu: DropDown {
         let menu = DropDown()
@@ -47,14 +48,18 @@ class reportCardVC: UIViewController {
                 }
                 self.arrayOfLabels.removeAll()
                 self.arrayOfReportCardClasses.removeAll()
-                var temp = self.getNewHTMl(mp: title, isRefresh: false)
-                self.ypos = 30.0
-                self.setUp(HTML: temp)
-                self.contentViewSize.height = self.getScrollHeight() + 50
-                self.scrollView.contentSize = self.contentViewSize
-                self.containerView.frame.size = self.contentViewSize
-                self.readyLabels(mp: title)
-                self.setUpHeaderLabels(mp: title)
+                
+                self.getNewHTMl(mp: title, isRefresh: false) {
+                    response in
+                    self.ypos = 30.0
+                    self.setUp(HTML: response)
+                    self.contentViewSize.height = self.getScrollHeight() + 50
+                    self.scrollView.contentSize = self.contentViewSize
+                    self.containerView.frame.size = self.contentViewSize
+                    self.readyLabels(mp: title)
+                    self.setUpHeaderLabels(mp: title)
+                }
+                
             }
             
         }
@@ -113,6 +118,11 @@ class reportCardVC: UIViewController {
                 isReportCardThere = false
                 selectedMPButton.title = ""
             }
+            let viewStateKey = try doc.select("#__VIEWSTATE").get(0).attr("value")
+            let eventValidationKey = try doc.select("#__EVENTVALIDATION").get(0).attr("value")
+            print(viewStateKey)
+            print("HELLO")
+            print(eventValidationKey)
             
         }
         catch {
@@ -422,30 +432,120 @@ class reportCardVC: UIViewController {
         }
         
     }
-    func getFiles(mp: String) -> String {
-        let file = "Users/aravindsridhar/gradus/HacHtmls/Report Card MP\(mp).txt"
-        let path=URL(fileURLWithPath: file)
-        var temp = try! String(contentsOf: path)
-        let char: Set<Character> = ["\\"]
-        temp.removeAll(where: { char.contains($0) })
-        return temp
+    func getFiles(mp: String, completion: @escaping (String) -> Void){
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                //POST REQUEST HERE with USERNAME AND PASSWORD
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        //print(data)
+                        
+                        let doc2 = try SwiftSoup.parse(self.reportCardHTML!)
+                        
+                        let viewStateKey = try doc2.select("#__VIEWSTATE").get(0).attr("value")
+                        let eventValidationKey = try doc2.select("#__EVENTVALIDATION").get(0).attr("value")
+                       
+                        var MPData = [String:String]()
+                        MPData["__EVENTTARGET"] = "ctl00$plnMain$ddlRCRuns"
+                        MPData["__VIEWSTATE"] =  viewStateKey
+                        MPData["__VIEWSTATEGENERATOR"] = "DF83DEEA"
+                        MPData["__EVENTVALIDATION"] = eventValidationKey
+                        MPData["ctl00$plnMain$hdnRCRun"] = self.currentMP
+                        MPData["ctl00$plnMain$ddlRCRuns"] = mp
+                        MPData["ctl00$plnMain$hdnddlRcRunsSelected"] = self.currentMP
+                        
+    
+                        AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
+                            let data1 = String(data: response.data!, encoding: .utf8)
+                            completion(data1!)
+                            print("HAD TO LOGIN")
+                        }
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else{//GET GRADES FROM MP HERE
+                let doc2 = try SwiftSoup.parse(self.reportCardHTML!)
+                
+                let viewStateKey = try doc2.select("#__VIEWSTATE").get(0).attr("value")
+                let eventValidationKey = try doc2.select("#__EVENTVALIDATION").get(0).attr("value")
+               
+                var MPData = [String:String]()
+                MPData["__EVENTTARGET"] = "ctl00$plnMain$ddlRCRuns"
+                MPData["__VIEWSTATE"] =  viewStateKey
+                MPData["__VIEWSTATEGENERATOR"] = "DF83DEEA"
+                MPData["__EVENTVALIDATION"] = eventValidationKey
+                MPData["ctl00$plnMain$hdnRCRun"] = self.currentMP
+                MPData["ctl00$plnMain$ddlRCRuns"] = mp
+                MPData["ctl00$plnMain$hdnddlRcRunsSelected"] = self.currentMP
+            AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
+                let data1 = String(data: response.data!, encoding: .utf8)
+                completion(data1!)
+                print("NO LOGIN")
+                
+            }
+            }
+            
+        }
+        catch {
+            
+        }
     }
-    func getNewHTMl(mp: String, isRefresh: Bool) -> String {
+    
+    func getNewHTMl(mp: String, isRefresh: Bool, completion: @escaping (String) -> Void)  {
+        
         if isRefresh == true {
-            UserDefaults.standard.set(getFiles(mp: mp), forKey: "\(username)RC:\(mp)")
-            return getFiles(mp: mp)
+            getFiles(mp: mp) {
+                response in
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username"))RC:\(mp)")
+                print(response)
+               
+                if mp == self.currentMP {
+                    self.reportCardHTML = response
+                    UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC")
+                    
+                }
+                completion(response)
+            }
+            
+            
         }
         if mp == currentMP {
-            return reportCardHTML!
+            completion(reportCardHTML!)
         }
-        else if UserDefaults.standard.object(forKey: "\(username)RC:\(mp)") != nil {
-          return UserDefaults.standard.object(forKey: "\(username)RC:\(mp)") as! String
+        else if UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))RC:\(mp)") != nil {
+          completion(UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))RC:\(mp)") as! String)
         }
         else {
-            UserDefaults.standard.set(getFiles(mp: mp), forKey: "\(username)RC:\(mp)")
-            return getFiles(mp: mp)
+            getFiles(mp: mp) {
+                response in
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username"))RC:\(mp)")
+                completion(response)
+            }
+            
         }
+         
     }
+     
     var refreshControl = UIRefreshControl()
     override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
@@ -471,15 +571,18 @@ class reportCardVC: UIViewController {
             }
             self.arrayOfLabels.removeAll()
             self.arrayOfReportCardClasses.removeAll()
-            var temp = self.getNewHTMl(mp: selectedMPButton.title!, isRefresh: false)
-            self.ypos = 30.0
-            self.setUp(HTML: temp)
-            self.contentViewSize.height = self.getScrollHeight() + 50
-            self.scrollView.contentSize = self.contentViewSize
-            self.containerView.frame.size = self.contentViewSize
-            self.readyLabels(mp: selectedMPButton.title!)
-            self.setUpHeaderLabels(mp: selectedMPButton.title!)
-            refreshControl.endRefreshing()
+            self.getNewHTMl(mp: mp!, isRefresh: true) {
+                response in
+                self.ypos = 30.0
+                self.setUp(HTML: response)
+                self.contentViewSize.height = self.getScrollHeight() + 50
+                self.scrollView.contentSize = self.contentViewSize
+                self.containerView.frame.size = self.contentViewSize
+                self.readyLabels(mp: mp!)
+                self.setUpHeaderLabels(mp: mp!)
+                self.refreshControl.endRefreshing()
+
+            }
         }
         
 }

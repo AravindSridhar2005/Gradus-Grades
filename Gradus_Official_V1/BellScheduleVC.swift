@@ -339,6 +339,101 @@ class BellScheduleVC: UIViewController {
             
         }
       }
+    
+    
+    var refreshControl = UIRefreshControl()
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            //refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+            scrollView.refreshControl = refreshControl
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        }
+
+        @objc func refresh()
+        {
+            for button in arrayOfButtons {
+                button.setTitle("", for: .normal)
+            }
+            
+            getScheduleHTML(){
+                response in
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+                var title = self.SemesterButton.title
+                self.SemesterButton.title = title
+                for label in self.arrayOfEFAutoLabels {
+                    label.removeFromSuperview()
+                }
+                for button in self.arrayOfButtons {
+                    button.removeFromSuperview()
+                }
+                self.arrayOfEFAutoLabels.removeAll()
+                self.arrayOfButtons.removeAll()
+                var mp = ""
+                if title == "Sem1" {
+                    mp = "Q1, Q2"
+                }
+                else {
+                    mp = "Q3, Q4"
+                }
+                self.contentViewSize.height = self.getScrollingHeight(sem: mp) + 50
+                self.scrollView.contentSize = self.contentViewSize
+                self.containerView.frame.size = self.contentViewSize
+                self.yPos = 0.0
+                if title == "Sem1" {
+                    self.readySem1Labels()
+                }
+                else {
+                    self.readySem2Labels()
+                }
+                self.readyAdvisory()
+                self.refreshControl.endRefreshing()
+            }
+            
+            
+
+        }
+
+    func getScheduleHTML(completion: @escaping (String) -> Void) {
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        let scheduleURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Classes.aspx")
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        let verification_doc = try SwiftSoup.parse(data!)
+                        completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
+                        print("HAD TO LOGIN")
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else {
+                completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
+                print("NO LOGIN REQUIRED")
+            }
+        }
+        catch {
+            
+        }
+    }
+    
     func setUp(HTML: String) {
         do {
             let docS = try SwiftSoup.parse(HTML)
@@ -384,84 +479,5 @@ class BellScheduleVC: UIViewController {
             
         }
     }
-    var refreshControl = UIRefreshControl()
-    override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            //refreshControl = UIRefreshControl()
-            refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-            scrollView.refreshControl = refreshControl
-            self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        }
-
-        @objc func refresh()
-        {
-            for label in arrayOfLabels {
-                label.removeFromSuperview()
-            }
-            arrayOfLabels.removeAll()
-            for button in arrayOfButtons {
-                button.removeFromSuperview()
-            }
-            arrayOfButtons.removeAll()
-            self.semOneADaySchedule.removeAll()
-            self.semTwoADaySchedule.removeAll()
-            self.semOneBDaySchedule.removeAll()
-            self.semTwoBDaySchedule.removeAll()
-            self.classes.removeAll()
-            for button in arrayOfEFAutoLabels {
-                button.removeFromSuperview()
-            }
-            arrayOfEFAutoLabels.removeAll()
-            
-            yPos = 0.0
-            getScheduleHTML() {
-                response in
-                self.setUp(HTML: response)
-                self.readySem1Labels()
-                self.readyAdvisory()
-                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
-                print(response)
-            }
-            
-            
-            refreshControl.endRefreshing()
-
-        }
-    func getScheduleHTML(completion: @escaping (String) -> Void) {
-        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
-        var DemograhpicsHTML:String = ""
-        let scheduleURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Classes.aspx")
-        do {
-            
-            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
-            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
-            //print(DemograhpicsHTML)
-            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
-                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
-                var logonHTML:String = ""
-                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
-                let logonDoc = try SwiftSoup.parse(logonHTML)
-                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
-                print(UserDefaults.standard.object(forKey: "username"))
-                print(UserDefaults.standard.object(forKey: "password"))
-                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
-                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
-                    let data = String(data: response.data!, encoding: .utf8)
-                    do {
-                        let verification_doc = try SwiftSoup.parse(data!)
-                        completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
-                    }
-                    catch{
-                        
-                    }
-                }
-            }
-            else {
-                completion(try String(contentsOf: scheduleURL!, encoding: .ascii))
-            }
-        }
-        catch {
-            
-        }
-    }
+ 
 }

@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
     var scheduleHTML = ""
     var progressReportHTML = ""
     var DemographicsHTML = ""
-    
+    var currentGradesHTML = ""
     @IBOutlet weak var contactTeachers: UIButton!
 
     let floatingButton: UIButton = {
@@ -34,6 +34,49 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        keepLoggedIn() {
+            response in
+            if response == true {
+                self.getReportCardHTML()
+                self.getTranscriptHTML()
+                self.getWeekViewHTML()
+                self.getScheduleHTML()
+                self.getCurrentGradesHTML()
+                self.getProgressReportHTML()
+                self.getDemographicsHTML()
+                //print(self.DemographicsHTML)
+                UserDefaults.standard.set(self.reportCardHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC")
+               
+                UserDefaults.standard.set(self.transcriptHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+                UserDefaults.standard.set(self.weekViewHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview")
+                UserDefaults.standard.set(self.scheduleHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+                UserDefaults.standard.set(self.progressReportHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)ProgressReport")
+                UserDefaults.standard.set(self.DemographicsHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
+                UserDefaults.standard.set(self.currentGradesHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades")
+                UserDefaults.standard.synchronize()
+            }
+            else{
+                self.getReportCardHTML()
+                self.getTranscriptHTML()
+                self.getWeekViewHTML()
+                self.getScheduleHTML()
+                self.getCurrentGradesHTML()
+                self.getProgressReportHTML()
+                self.getDemographicsHTML()
+                //print(self.DemographicsHTML)
+                UserDefaults.standard.set(self.reportCardHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)RC")
+               
+                UserDefaults.standard.set(self.transcriptHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+                UserDefaults.standard.set(self.weekViewHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview")
+                UserDefaults.standard.set(self.scheduleHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)schedule")
+                UserDefaults.standard.set(self.progressReportHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)ProgressReport")
+                UserDefaults.standard.set(self.DemographicsHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
+                UserDefaults.standard.set(self.currentGradesHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades")
+                UserDefaults.standard.synchronize()
+                
+            }
+        //print(UserDefaults.standard.object(forKey: "247070transcript"))
+        }
         //print("Hello")
         /*
         self.getReportCardHTML()
@@ -56,7 +99,7 @@ class HomeViewController: UIViewController {
         floatingButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
     override func viewDidAppear(_ animated: Bool) {
-       
+       /*
         keepLoggedIn() {
             response in
             if response == true {
@@ -76,11 +119,12 @@ class HomeViewController: UIViewController {
                 UserDefaults.standard.set(self.DemographicsHTML, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)demographics")
             }
             else{
-                
+                print("Hello")
                 
             }
         //print(UserDefaults.standard.object(forKey: "247070transcript"))
         }
+        */
     }
     @objc func didTapButton() {
         let vc = ProfileVC()
@@ -114,6 +158,17 @@ class HomeViewController: UIViewController {
             
         }
     }
+    
+    func getCurrentGradesHTML() {
+    
+        let currentGradesURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")
+        do {
+            self.currentGradesHTML = try String(contentsOf: currentGradesURL!, encoding: .ascii)
+        }
+        catch {
+            
+        }
+    }
     func getDemographicsHTML() {
     
         let demographicURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
@@ -125,11 +180,24 @@ class HomeViewController: UIViewController {
         }
     }
     func getProgressReportHTML() {
+        /*
         let file = "Users/aravindsridhar/gradus/HacHtmls/ProgressReport.txt"
         let path=URL(fileURLWithPath: file)
         self.progressReportHTML = try! String(contentsOf: path)
         let char: Set<Character> = ["\\"]
         progressReportHTML.removeAll(where: { char.contains($0) })
+         */
+        
+        let PRURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/InterimProgress.aspx")
+        do {
+            self.progressReportHTML = try String(contentsOf: PRURL!, encoding: .ascii)
+            //print(reportCardHTML)
+        }
+        catch {
+            
+        }
+         
+          
     }
     func getTranscriptHTML() {
         let transcriptURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Transcript.aspx")
@@ -143,23 +211,24 @@ class HomeViewController: UIViewController {
     
     
     func getReportCardHTML() {
-        
+        /*
         let file = "Users/aravindsridhar/gradus/HacHtmls/Report Card MP4.txt"
         let path=URL(fileURLWithPath: file)
         self.reportCardHTML = try! String(contentsOf: path)
         let char: Set<Character> = ["\\"]
         reportCardHTML.removeAll(where: { char.contains($0) })
+        */
         
-        /*
         let RCURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx")
         do {
             self.reportCardHTML = try String(contentsOf: RCURL!, encoding: .ascii)
-            print(reportCardHTML)
+            //print(reportCardHTML)
         }
         catch {
             
         }
-         */
+        
+         
         
     }
     

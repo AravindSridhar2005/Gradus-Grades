@@ -23,11 +23,10 @@ class gradesVC: UIViewController {
     let tableView = UITableView()
     var dataSource = [String]()
     var ypos = 0.0
-    var username = "247070"
     
     var arrayOfButtons = [UIButton]()
     var arrayOfLabels = [UILabel]()
-    var currentGradesHTML = ""
+    var currentGradesHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades") as? String ?? ""
     var arrayOfClassNames = [String]()
     var arrayOfGrades = [String]()
     var dict = [String: [Assignment]]()
@@ -153,29 +152,30 @@ class gradesVC: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     override func viewDidLoad() {
-    self.setUpCurrentGradesHTML()
+        
+    //self.setUpCurrentGradesHTML()
 
         super.viewDidLoad()
         //setUpCurrentGradesHTML()
-        view.addSubview(containerView)
+            self.view.addSubview(self.containerView)
         
         print("Hello")
         
         do {
-            let doc2 = try SwiftSoup.parse(currentGradesHTML)
+            let doc2 = try SwiftSoup.parse(self.currentGradesHTML)
             let currentMPHelper = try doc2.select("div.sg-content-grid-container").select("#plnMain_ddlReportCardRuns").select("option")
             
             var currentMPTemp:String = ""
             for element in currentMPHelper{
                 if (element.hasAttr("selected")){
-                    MPButton.title = "MP\(try element.text())"
-                    currentMP = try element.text()
+                    self.MPButton.title = "MP\(try element.text())"
+                    self.currentMP = try element.text()
                 }
             }
-            view.addSubview(scrollView)
-            scrollView.addSubview(containerView)
+            self.view.addSubview(self.scrollView)
+            self.scrollView.addSubview(self.containerView)
             
-            floatingButton.addTarget(self, action: #selector(didTapProfileButton), for: .touchUpInside)
+            self.floatingButton.addTarget(self, action: #selector(self.didTapProfileButton), for: .touchUpInside)
             
         }
         catch {
@@ -183,7 +183,8 @@ class gradesVC: UIViewController {
         }
         
         
-        display(html: currentGradesHTML)
+            self.display(html: self.currentGradesHTML)
+        
         
    
     }
@@ -411,14 +412,7 @@ class gradesVC: UIViewController {
                         AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
                             let data1 = String(data: response.data!, encoding: .utf8)
                             completion(data1!)
-                            do {
-                                var html = try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")!, encoding: .ascii)
-                                completion(html)
-                                print("HAD TO LOGIN")
-                            }
-                            catch {
-                                
-                            }
+                            print("HAD TO LOGIN")
                         }
                     }
                     catch{
@@ -490,15 +484,7 @@ class gradesVC: UIViewController {
             AF.request("https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx", method: .post, parameters: MPData, encoding: URLEncoding()).response { response in
                 let data1 = String(data: response.data!, encoding: .utf8)
                 completion(data1!)
-                do {
-                    var html = try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx")!, encoding: .ascii)
-                    completion(html)
-                    print("NO LOGIN")
-                    
-                }
-                catch {
-                    
-                }
+                print("NO LOGIN")
             }
             }
             
@@ -511,9 +497,10 @@ class gradesVC: UIViewController {
         if isRefresh == true {
             getFiles(mp: mp) {
                 response in
-                UserDefaults.standard.set(response, forKey: "\(self.username)MP:\(mp)")
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username"))MP:\(mp)")
                 if mp == self.currentMP {
                     self.currentGradesHTML = response
+                    UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades")
                 }
                 completion(response)
             }
@@ -522,14 +509,14 @@ class gradesVC: UIViewController {
         if mp == currentMP {
             completion(currentGradesHTML)
         }
-        else if UserDefaults.standard.object(forKey: "\(username)MP:\(mp)") != nil {
+        else if UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))MP:\(mp)") != nil {
             print("Already Saved String")
-          completion(UserDefaults.standard.object(forKey: "\(username)MP:\(mp)") as! String)
+          completion(UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))MP:\(mp)") as! String)
         }
         else{
             getFiles(mp: mp) {
                 response in
-                UserDefaults.standard.set(response, forKey: "\(self.username)MP:\(mp)")
+                UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username"))MP:\(mp)")
                 completion(response)
             }
         }
@@ -574,10 +561,11 @@ class gradesVC: UIViewController {
                 self.scrollView.contentSize = self.contentViewSize
                 self.containerView.frame.size = self.contentViewSize
                 self.display(html: response)
+                // Code to refresh table view
+                self.refreshControl.endRefreshing()
             }
             
-            // Code to refresh table view
-            refreshControl.endRefreshing()
+            
 
         }
 

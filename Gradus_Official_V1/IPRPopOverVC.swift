@@ -14,6 +14,7 @@ class IPRPopOverVC: UIViewController {
     
     @IBOutlet weak var roomLabel: UILabel!
     
+    @IBOutlet weak var tempview: UIView!
     
     @IBOutlet weak var tardiesLabel: UILabel!
     
@@ -22,6 +23,8 @@ class IPRPopOverVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        tempview.layer.cornerRadius = (tempview.frame.height / 3) - 10
+
         TeacherLabel.text = "Teacher: \(iprobj.teacher)"
         roomLabel.text =  "Room: \(iprobj.room)"
         tardiesLabel.text = "Tardies: \(iprobj.tardies)"

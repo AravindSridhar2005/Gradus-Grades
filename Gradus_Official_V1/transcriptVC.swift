@@ -8,10 +8,9 @@
 import UIKit
 import SwiftSoup
 import Alamofire
-class transcriptVC: UIViewController {func getTranscriptHTML() {
+class transcriptVC: UIViewController {
    
-}
-    var transcriptHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript") as! String
+    var transcriptHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript") as? String 
     var transcriptYears = [transcriptYear]()
     var testLabel = UILabel()
     var arrayOfButtons = [UIButton]()
@@ -74,10 +73,10 @@ class transcriptVC: UIViewController {func getTranscriptHTML() {
                 response in
                 self.setUp(HTML: response)
                 UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
-                
+                self.refreshControl.endRefreshing()
             }
             
-            refreshControl.endRefreshing()
+            
 
         }
     func getTranscriptHTML(completion: @escaping (String) -> Void) {
@@ -168,7 +167,7 @@ class transcriptVC: UIViewController {func getTranscriptHTML() {
                 arrayOfButtons.append(nameButton)
                 if transcriptYears.count-1 == i {
                     do {
-                        let doc3 = try SwiftSoup.parse(transcriptHTML)
+                        let doc3 = try SwiftSoup.parse(transcriptHTML!)
                         var rank:String = ""
                         rank = try doc3.select("#plnMain_rpTranscriptGroup_lblGPARank1").text()
                         var unweightedGPA = try doc3.select("span#plnMain_rpTranscriptGroup_lblGPACum2").text()
