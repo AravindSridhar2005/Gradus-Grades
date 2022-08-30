@@ -117,7 +117,7 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -284,70 +284,228 @@
             <objects>
                 <viewController storyboardIdentifier="Home" id="NNo-P0-8AH" customClass="HomeViewController" customModule="Gradus_Official_V1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="smU-rr-Weh">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="vLP-ME-8f1">
-                                <rect key="frame" x="138" y="302.5" width="138" height="291"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aQe-W9-t0B">
+                                <rect key="frame" x="0.0" y="88" width="414" height="829"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ViB-5F-x1A">
-                                        <rect key="frame" x="22.5" y="0.0" width="93" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Transcript "/>
-                                        <connections>
-                                            <action selector="transcriptPressed:" destination="NNo-P0-8AH" eventType="touchUpInside" id="3i4-p1-XPv"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Srv-yf-hPx">
-                                        <rect key="frame" x="18" y="65" width="102.5" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Report Card"/>
-                                        <connections>
-                                            <segue destination="zn3-Gt-9lt" kind="show" id="eL4-sO-Wgr"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="svm-1n-Fg4">
-                                        <rect key="frame" x="5" y="130" width="128.5" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Progress Report"/>
-                                        <connections>
-                                            <segue destination="Uvo-H3-Egd" kind="show" id="P4f-Re-7d7"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uVz-3e-y3c">
-                                        <rect key="frame" x="13" y="195" width="112" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Bell Schedule"/>
-                                        <connections>
-                                            <segue destination="3ta-FW-gkE" kind="show" id="5Jb-vN-thI"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xWH-69-qln">
-                                        <rect key="frame" x="0.0" y="260" width="138" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Contact Teachers"/>
-                                        <connections>
-                                            <action selector="contactTeachersPressed:" destination="NNo-P0-8AH" eventType="touchUpInside" id="r0A-5A-6bp"/>
-                                        </connections>
-                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVd-At-Qgt" userLabel="ContentView">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="800"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="azJ-Nd-SIt" customClass="CardView" customModule="Gradus_Official_V1" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="20" width="374" height="110"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hoN-65-Mr8">
+                                                        <rect key="frame" x="20" y="52" width="334" height="38"/>
+                                                        <color key="backgroundColor" name="AccentColor"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Transcript"/>
+                                                        <connections>
+                                                            <segue destination="XGr-qR-sgl" kind="show" id="nu2-0i-4Qc"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Your Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8h-cg-Jop">
+                                                        <rect key="frame" x="10" y="10" width="354" height="32"/>
+                                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="110" id="97D-Yt-yx5"/>
+                                                    <constraint firstItem="z8h-cg-Jop" firstAttribute="top" secondItem="azJ-Nd-SIt" secondAttribute="top" constant="10" id="C5Y-2b-Zw2"/>
+                                                    <constraint firstAttribute="trailing" secondItem="hoN-65-Mr8" secondAttribute="trailing" constant="20" id="HNO-H6-jgg"/>
+                                                    <constraint firstItem="hoN-65-Mr8" firstAttribute="top" secondItem="z8h-cg-Jop" secondAttribute="bottom" constant="10" id="YkM-id-S73"/>
+                                                    <constraint firstItem="hoN-65-Mr8" firstAttribute="leading" secondItem="azJ-Nd-SIt" secondAttribute="leading" constant="20" id="hIM-cc-nto"/>
+                                                    <constraint firstAttribute="trailing" secondItem="z8h-cg-Jop" secondAttribute="trailing" constant="10" id="jKK-IU-27v"/>
+                                                    <constraint firstItem="z8h-cg-Jop" firstAttribute="leading" secondItem="azJ-Nd-SIt" secondAttribute="leading" constant="10" id="tcJ-Jj-0X2"/>
+                                                    <constraint firstAttribute="bottom" secondItem="hoN-65-Mr8" secondAttribute="bottom" constant="20" id="uEd-Dl-3Rb"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CzA-Io-coS" customClass="CardView" customModule="Gradus_Official_V1" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="140" width="374" height="110"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Reporting Period Scores" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dX-KW-bm7">
+                                                        <rect key="frame" x="10" y="10" width="354" height="32"/>
+                                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ei6-QW-hV5">
+                                                        <rect key="frame" x="20" y="52" width="334" height="38"/>
+                                                        <color key="backgroundColor" systemColor="linkColor"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Report Card"/>
+                                                        <connections>
+                                                            <segue destination="zn3-Gt-9lt" kind="show" id="Yz6-sv-Ea7"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <constraints>
+                                                    <constraint firstItem="ei6-QW-hV5" firstAttribute="top" secondItem="4dX-KW-bm7" secondAttribute="bottom" constant="10" id="9ZR-FA-hHX"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ei6-QW-hV5" secondAttribute="trailing" constant="20" id="Awt-Vk-7J5"/>
+                                                    <constraint firstAttribute="height" constant="110" id="Blm-2I-kNR"/>
+                                                    <constraint firstItem="ei6-QW-hV5" firstAttribute="leading" secondItem="CzA-Io-coS" secondAttribute="leading" constant="20" id="XyT-Sj-C1I"/>
+                                                    <constraint firstAttribute="trailing" secondItem="4dX-KW-bm7" secondAttribute="trailing" constant="10" id="aI9-Fo-JVs"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ei6-QW-hV5" secondAttribute="bottom" constant="20" id="aQu-MD-vpT"/>
+                                                    <constraint firstItem="4dX-KW-bm7" firstAttribute="top" secondItem="CzA-Io-coS" secondAttribute="top" constant="10" id="gMh-Ni-cWA"/>
+                                                    <constraint firstItem="4dX-KW-bm7" firstAttribute="leading" secondItem="CzA-Io-coS" secondAttribute="leading" constant="10" id="uog-QT-3gC"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aK9-ah-hyZ" customClass="CardView" customModule="Gradus_Official_V1" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="260" width="374" height="110"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Interim Scores" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="53P-i9-1bw">
+                                                        <rect key="frame" x="10" y="10" width="354" height="32"/>
+                                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YzQ-8U-bb7">
+                                                        <rect key="frame" x="20" y="52" width="334" height="38"/>
+                                                        <color key="backgroundColor" name="AccentColor"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Progress Report"/>
+                                                        <connections>
+                                                            <segue destination="Uvo-H3-Egd" kind="show" id="zHs-7O-S7s"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="53P-i9-1bw" secondAttribute="trailing" constant="10" id="2pT-fn-JGa"/>
+                                                    <constraint firstAttribute="bottom" secondItem="YzQ-8U-bb7" secondAttribute="bottom" constant="20" id="GMY-Pw-UL7"/>
+                                                    <constraint firstAttribute="height" constant="110" id="Hkz-Gk-DWE"/>
+                                                    <constraint firstItem="YzQ-8U-bb7" firstAttribute="leading" secondItem="aK9-ah-hyZ" secondAttribute="leading" constant="20" id="TK7-q0-di5"/>
+                                                    <constraint firstAttribute="trailing" secondItem="YzQ-8U-bb7" secondAttribute="trailing" constant="20" id="WVT-dZ-5NY"/>
+                                                    <constraint firstItem="53P-i9-1bw" firstAttribute="leading" secondItem="aK9-ah-hyZ" secondAttribute="leading" constant="10" id="YZ4-vY-21m"/>
+                                                    <constraint firstItem="YzQ-8U-bb7" firstAttribute="top" secondItem="53P-i9-1bw" secondAttribute="bottom" constant="10" id="vzV-mZ-Tyi"/>
+                                                    <constraint firstItem="53P-i9-1bw" firstAttribute="top" secondItem="aK9-ah-hyZ" secondAttribute="top" constant="10" id="w6S-kp-cRM"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ybG-dY-FMr" customClass="CardView" customModule="Gradus_Official_V1" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="380" width="374" height="110"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Classes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1OY-VD-VVg">
+                                                        <rect key="frame" x="10" y="10" width="354" height="32"/>
+                                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7TZ-iI-hkQ">
+                                                        <rect key="frame" x="20" y="52" width="334" height="38"/>
+                                                        <color key="backgroundColor" name="AccentColor"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Class Schedule"/>
+                                                        <connections>
+                                                            <segue destination="3ta-FW-gkE" kind="show" id="UdQ-Pl-ldg"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <constraints>
+                                                    <constraint firstItem="1OY-VD-VVg" firstAttribute="leading" secondItem="ybG-dY-FMr" secondAttribute="leading" constant="10" id="CfR-qI-ZYj"/>
+                                                    <constraint firstAttribute="trailing" secondItem="7TZ-iI-hkQ" secondAttribute="trailing" constant="20" id="NMJ-6f-sEm"/>
+                                                    <constraint firstItem="1OY-VD-VVg" firstAttribute="top" secondItem="ybG-dY-FMr" secondAttribute="top" constant="10" id="Ry3-5J-C4h"/>
+                                                    <constraint firstAttribute="bottom" secondItem="7TZ-iI-hkQ" secondAttribute="bottom" constant="20" id="d74-0t-4cL"/>
+                                                    <constraint firstItem="7TZ-iI-hkQ" firstAttribute="top" secondItem="1OY-VD-VVg" secondAttribute="bottom" constant="10" id="e8O-pL-iiH"/>
+                                                    <constraint firstItem="7TZ-iI-hkQ" firstAttribute="leading" secondItem="ybG-dY-FMr" secondAttribute="leading" constant="20" id="iuf-7T-abA"/>
+                                                    <constraint firstAttribute="height" constant="110" id="q9N-2Y-Qaf"/>
+                                                    <constraint firstAttribute="trailing" secondItem="1OY-VD-VVg" secondAttribute="trailing" constant="10" id="y3j-xW-tlf"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ika-Ul-iq6" customClass="CardView" customModule="Gradus_Official_V1" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="500" width="374" height="110"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Your Teachers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp7-4V-IKG">
+                                                        <rect key="frame" x="10" y="10" width="354" height="32"/>
+                                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bfb-Xj-Kfm">
+                                                        <rect key="frame" x="20" y="52" width="334" height="38"/>
+                                                        <color key="backgroundColor" name="AccentColor"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Contact Teachers"/>
+                                                        <connections>
+                                                            <segue destination="QVX-BU-jqM" kind="show" id="nxW-Bf-8u7"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="zp7-4V-IKG" secondAttribute="trailing" constant="10" id="2Xb-x1-nRe"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Bfb-Xj-Kfm" secondAttribute="bottom" constant="20" id="AKX-ZG-Den"/>
+                                                    <constraint firstItem="Bfb-Xj-Kfm" firstAttribute="top" secondItem="zp7-4V-IKG" secondAttribute="bottom" constant="10" id="AOQ-95-Cqi"/>
+                                                    <constraint firstItem="zp7-4V-IKG" firstAttribute="top" secondItem="Ika-Ul-iq6" secondAttribute="top" constant="10" id="W5w-e8-wBC"/>
+                                                    <constraint firstItem="zp7-4V-IKG" firstAttribute="leading" secondItem="Ika-Ul-iq6" secondAttribute="leading" constant="10" id="YGY-fY-O7E"/>
+                                                    <constraint firstItem="Bfb-Xj-Kfm" firstAttribute="leading" secondItem="Ika-Ul-iq6" secondAttribute="leading" constant="20" id="sZN-Rt-WCe"/>
+                                                    <constraint firstAttribute="height" constant="110" id="woY-2K-D0A"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Bfb-Xj-Kfm" secondAttribute="trailing" constant="20" id="zEJ-yU-0Gf"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="azJ-Nd-SIt" secondAttribute="trailing" constant="20" id="1Tu-at-Qti"/>
+                                            <constraint firstItem="aK9-ah-hyZ" firstAttribute="leading" secondItem="uVd-At-Qgt" secondAttribute="leading" constant="20" id="26q-L5-a9F"/>
+                                            <constraint firstItem="ybG-dY-FMr" firstAttribute="top" secondItem="aK9-ah-hyZ" secondAttribute="bottom" constant="10" id="6GF-9F-Vdk"/>
+                                            <constraint firstAttribute="trailing" secondItem="CzA-Io-coS" secondAttribute="trailing" constant="20" id="7x8-zW-jOX"/>
+                                            <constraint firstItem="aK9-ah-hyZ" firstAttribute="top" secondItem="CzA-Io-coS" secondAttribute="bottom" constant="10" id="ILG-wU-21B"/>
+                                            <constraint firstItem="CzA-Io-coS" firstAttribute="top" secondItem="azJ-Nd-SIt" secondAttribute="bottom" constant="10" id="TAa-4O-7tm"/>
+                                            <constraint firstItem="CzA-Io-coS" firstAttribute="leading" secondItem="uVd-At-Qgt" secondAttribute="leading" constant="20" id="Usc-dU-Cyd"/>
+                                            <constraint firstItem="azJ-Nd-SIt" firstAttribute="leading" secondItem="uVd-At-Qgt" secondAttribute="leading" constant="20" id="Zfy-7d-lih"/>
+                                            <constraint firstItem="azJ-Nd-SIt" firstAttribute="top" secondItem="uVd-At-Qgt" secondAttribute="top" constant="20" id="gh1-lE-522"/>
+                                            <constraint firstItem="ybG-dY-FMr" firstAttribute="leading" secondItem="uVd-At-Qgt" secondAttribute="leading" constant="20" id="hCl-lb-mum"/>
+                                            <constraint firstAttribute="height" constant="800" id="hqi-UI-xof"/>
+                                            <constraint firstItem="Ika-Ul-iq6" firstAttribute="leading" secondItem="uVd-At-Qgt" secondAttribute="leading" constant="20" id="mIb-m7-NPZ"/>
+                                            <constraint firstItem="Ika-Ul-iq6" firstAttribute="top" secondItem="ybG-dY-FMr" secondAttribute="bottom" constant="10" id="rDv-9z-4af"/>
+                                            <constraint firstAttribute="trailing" secondItem="aK9-ah-hyZ" secondAttribute="trailing" constant="20" id="rit-xc-bgh"/>
+                                            <constraint firstAttribute="trailing" secondItem="ybG-dY-FMr" secondAttribute="trailing" constant="20" id="t6a-hU-FFA"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ika-Ul-iq6" secondAttribute="trailing" constant="20" id="tds-E6-kaY"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                            </stackView>
+                                <constraints>
+                                    <constraint firstItem="uVd-At-Qgt" firstAttribute="leading" secondItem="aQe-W9-t0B" secondAttribute="leading" id="lzV-LW-yCg"/>
+                                    <constraint firstItem="uVd-At-Qgt" firstAttribute="top" secondItem="aQe-W9-t0B" secondAttribute="top" id="mh3-RN-oHX"/>
+                                    <constraint firstAttribute="bottom" secondItem="uVd-At-Qgt" secondAttribute="bottom" id="xHV-bZ-T2a"/>
+                                    <constraint firstAttribute="trailing" secondItem="uVd-At-Qgt" secondAttribute="trailing" id="zII-Yc-HhD"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0oU-ch-rcJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="vLP-ME-8f1" firstAttribute="centerX" secondItem="smU-rr-Weh" secondAttribute="centerX" id="Eol-lt-gEQ"/>
-                            <constraint firstItem="vLP-ME-8f1" firstAttribute="centerY" secondItem="smU-rr-Weh" secondAttribute="centerY" id="TsE-vg-Tg0"/>
+                            <constraint firstItem="aQe-W9-t0B" firstAttribute="leading" secondItem="0oU-ch-rcJ" secondAttribute="leading" id="Ejg-mR-7jd"/>
+                            <constraint firstItem="aQe-W9-t0B" firstAttribute="bottom" secondItem="0oU-ch-rcJ" secondAttribute="bottom" id="Lu2-Ts-jqW"/>
+                            <constraint firstItem="aQe-W9-t0B" firstAttribute="trailing" secondItem="0oU-ch-rcJ" secondAttribute="trailing" id="XwT-0l-dPG"/>
+                            <constraint firstItem="aQe-W9-t0B" firstAttribute="top" secondItem="0oU-ch-rcJ" secondAttribute="top" id="f9T-Pr-NiI"/>
+                            <constraint firstItem="uVd-At-Qgt" firstAttribute="width" secondItem="smU-rr-Weh" secondAttribute="width" id="hkb-EH-mUR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Gradus" id="Wyj-5z-Xmo"/>
+                    <size key="freeformSize" width="414" height="1000"/>
                     <connections>
-                        <outlet property="contactTeachers" destination="xWH-69-qln" id="xwb-Zv-VoZ"/>
+                        <outlet property="IPRButton" destination="YzQ-8U-bb7" id="lpj-eB-iMf"/>
+                        <outlet property="RCButton" destination="ei6-QW-hV5" id="Orm-Ch-A4Y"/>
+                        <outlet property="contactTeachers" destination="Bfb-Xj-Kfm" id="ZMB-4L-6Fy"/>
+                        <outlet property="scheduleButton" destination="7TZ-iI-hkQ" id="9lg-lm-aKT"/>
+                        <outlet property="transcriptButton" destination="hoN-65-Mr8" id="u8H-Xj-Byk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nzv-RI-t8X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-749" y="1213"/>
+            <point key="canvasLocation" x="-749.27536231884062" y="1212.7232142857142"/>
         </scene>
         <!--Progress Report-->
         <scene sceneID="8Tp-Uw-Lus">
@@ -374,7 +532,7 @@
             </objects>
             <point key="canvasLocation" x="1675" y="1053"/>
         </scene>
-        <!--Contact TeachersVC-->
+        <!--Contact Teachers-->
         <scene sceneID="Znf-CM-zuo">
             <objects>
                 <viewController storyboardIdentifier="contactTeachers" id="QVX-BU-jqM" customClass="ContactTeachersVC" customModule="Gradus_Official_V1" customModuleProvider="target" sceneMemberID="viewController">
@@ -384,6 +542,7 @@
                         <viewLayoutGuide key="safeArea" id="a9d-6q-eb2"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Contact Teachers" id="GgD-Ma-UKu"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xbx-oA-aFz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -684,6 +843,30 @@
             </objects>
             <point key="canvasLocation" x="808.69565217391312" y="2532.5892857142858"/>
         </scene>
+        <!--Spash ScreenVC-->
+        <scene sceneID="95W-M6-WDS">
+            <objects>
+                <viewController storyboardIdentifier="SS" id="Rx1-aJ-XcT" customClass="SpashScreenVC" customModule="Gradus_Official_V1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8fR-6B-bfH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradus-1" translatesAutoresizingMaskIntoConstraints="NO" id="djt-sk-RpL">
+                                <rect key="frame" x="27" y="268" width="360" height="360"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="h3M-Qz-8th"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="djt-sk-RpL" firstAttribute="centerX" secondItem="8fR-6B-bfH" secondAttribute="centerX" id="A0a-iN-HZW"/>
+                            <constraint firstItem="djt-sk-RpL" firstAttribute="centerY" secondItem="8fR-6B-bfH" secondAttribute="centerY" id="ncc-TV-dES"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X9P-nw-kIm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1663" y="2982"/>
+        </scene>
         <!--ProfileVC-->
         <scene sceneID="q3C-qR-sa5">
             <objects>
@@ -726,7 +909,7 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -748,7 +931,7 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -773,7 +956,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XQn-iS-p7Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-736" y="1856"/>
+            <point key="canvasLocation" x="-733" y="1904"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="GDd-xR-KWj">
@@ -793,6 +976,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Gradus-1" width="360" height="360"/>
         <image name="book.closed.fill" catalog="system" width="115" height="128"/>
         <image name="bookmark.square" catalog="system" width="128" height="114"/>
         <image name="graduationcap.fill" catalog="system" width="128" height="108"/>
@@ -803,8 +987,14 @@
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

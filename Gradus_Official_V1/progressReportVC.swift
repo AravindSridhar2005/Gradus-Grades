@@ -55,7 +55,7 @@ class progressReportVC: UIViewController {
                     self.containerView.frame.size = self.contentViewSize
                     self.setUp(HTML: response)
                     self.readyLabels()
-                    self.refreshControl.endRefreshing()
+                    
 
                 }
            
@@ -95,9 +95,7 @@ class progressReportVC: UIViewController {
         return height
     }
     override func viewDidLoad() {
-        view.addSubview(containerView)
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
+        
         super.viewDidLoad()
         do {
             let doc = try SwiftSoup.parse(progressReportHTML ?? "")
@@ -117,6 +115,9 @@ class progressReportVC: UIViewController {
         
         }
         if isProgressReportHere {
+            view.addSubview(containerView)
+            view.addSubview(scrollView)
+            scrollView.addSubview(containerView)
             do {
                 let docIPR = try SwiftSoup.parse(progressReportHTML)
                 let rand = try docIPR.select("#plnMain_ddlIPRDates").select("option")
@@ -148,7 +149,94 @@ class progressReportVC: UIViewController {
             readyLabels()
         }
     }
-    
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        getHTMLForLoad() {
+            response in
+            do {
+                self.isProgressReportHere = true
+                let doc = try SwiftSoup.parse(response)
+                let label = try doc.select("#plnMain_lblMessage").text()
+                if label == "This student does not have any Interim Progress Reports for this school year." {
+                    self.isProgressReportHere = false
+                    self.selectedButton.title = ""
+                }
+                if self.isProgressReportHere {
+                    self.containerView.removeFromSuperview()
+                    self.scrollView.removeFromSuperview()
+                    self.view.addSubview(self.containerView)
+                    self.view.addSubview(self.scrollView)
+                    self.scrollView.addSubview(self.containerView)
+                    for button in self.arrayOfButtons {
+                        button.removeFromSuperview()
+                    }
+                    for label in self.arrayOfLabels {
+                        label.removeFromSuperview()
+                    }
+                    self.arrayOfLabels.removeAll()
+                    self.arrayOfIPRObjects.removeAll()
+                    self.arrayOfButtons.removeAll()
+                    self.yPos = 0.0
+                    self.contentViewSize.height = self.getScrollingHeight(HTML: response) + 20
+                    self.scrollView.contentSize = self.contentViewSize
+                    self.containerView.frame.size = self.contentViewSize
+                    self.setUp(HTML: response)
+                    self.readyLabels()
+                    self.contentViewSize.height = self.getScrollingHeight(HTML: response)
+                    self.scrollView.contentSize = self.contentViewSize
+                    self.containerView.frame.size = self.contentViewSize
+                    
+                    let mpElements = try doc.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
+                    self.menu.dataSource.removeAll()
+                    self.menu.anchorView = self.selectedButton
+
+                    for element in mpElements {
+                        self.menu.dataSource.append(try element.text())
+                        if element.hasAttr("selected") {
+                            self.currentDate = try element.text()
+                            self.selectedButton.title = self.currentDate
+                        }
+                    }
+                    
+                    
+                   
+                    self.menu.selectionAction = { index, title in
+                        let date = title
+                        self.selectedButton.title = title
+                       
+                
+                        self.getNewHTMl(dates: date, isRefresh: false) {
+                            response in
+                            for button in self.arrayOfButtons {
+                                button.removeFromSuperview()
+                            }
+                            for label in self.arrayOfLabels {
+                                label.removeFromSuperview()
+                            }
+                            self.arrayOfLabels.removeAll()
+                            self.arrayOfIPRObjects.removeAll()
+                            self.arrayOfButtons.removeAll()
+                            self.yPos = 0.0
+
+                            self.contentViewSize.height = self.getScrollingHeight(HTML: response) + 20
+                            self.scrollView.contentSize = self.contentViewSize
+                            self.containerView.frame.size = self.contentViewSize
+                            self.setUp(HTML: response)
+                            self.readyLabels()
+                            
+
+                        }
+                        
+                    }
+                }
+            }
+            catch {
+                
+            }
+        }
+    }
+     */
     func readyLabels() {
         
         for i in 0..<arrayOfIPRObjects.count {
@@ -192,6 +280,45 @@ class progressReportVC: UIViewController {
         }
         
       }
+    
+    func getHTMLForLoad(completion: @escaping (String) -> Void) {
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                //POST REQUEST HERE with USERNAME AND PASSWORD
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        completion(try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/InterimProgress.aspx")!, encoding: .ascii))
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else{//GET GRADES FROM MP HERE
+                completion(try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/InterimProgress.aspx")!, encoding: .ascii))
+            }
+            
+        }
+        catch {
+            
+        }
+    }
     func setUp(HTML: String) {
         do {
             let docIPR = try SwiftSoup.parse(HTML)
@@ -365,7 +492,7 @@ class progressReportVC: UIViewController {
             
             
         }
-        if dates == currentDate {
+        else if dates == currentDate {
             completion(progressReportHTML)
         }
         else if UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))PR:\(dates)") != nil {

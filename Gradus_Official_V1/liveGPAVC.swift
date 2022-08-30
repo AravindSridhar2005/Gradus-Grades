@@ -24,13 +24,14 @@ class liveGPAVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        floatingButton.frame = CGRect(x: view.frame.size.width - 75, y: 75, width: 50, height: 50)
+        var rightNavBarButton = UIBarButtonItem(customView:floatingButton)
+         self.navigationItem.leftBarButtonItem = rightNavBarButton
         floatingButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        floatingButton.frame = CGRect(x: view.frame.size.width - 75, y: 75, width: 50, height: 50)
-        var rightNavBarButton = UIBarButtonItem(customView:floatingButton)
-         self.navigationItem.leftBarButtonItem = rightNavBarButton
+    
     }
     @objc func didTapButton() {
         let vc = ProfileVC()

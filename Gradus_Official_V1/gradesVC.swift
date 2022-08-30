@@ -23,7 +23,7 @@ class gradesVC: UIViewController {
     let tableView = UITableView()
     var dataSource = [String]()
     var ypos = 0.0
-    
+    private var viewDidAppearQueue: [() -> ()] = []
     var arrayOfButtons = [UIButton]()
     var arrayOfLabels = [UILabel]()
     var currentGradesHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades") as? String ?? ""
@@ -39,6 +39,7 @@ class gradesVC: UIViewController {
     var displayMultiplier = 0.0
     var currentMP = ""
     var testLabel = UILabel()
+    
     var menu: DropDown {
         let menu = DropDown()
         do {
@@ -139,9 +140,7 @@ class gradesVC: UIViewController {
     }()
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        floatingButton.frame = CGRect(x: view.frame.size.width - 75, y: 75, width: 50, height: 50)
-        var rightNavBarButton = UIBarButtonItem(customView:floatingButton)
-         self.navigationItem.leftBarButtonItem = rightNavBarButton
+        
     }
   
     @objc func didTapProfileButton() {
@@ -153,12 +152,15 @@ class gradesVC: UIViewController {
     }
     override func viewDidLoad() {
         
-    //self.setUpCurrentGradesHTML()
-
+        floatingButton.frame = CGRect(x: view.frame.size.width - 75, y: 75, width: 50, height: 50)
+        var rightNavBarButton = UIBarButtonItem(customView:floatingButton)
+         self.navigationItem.leftBarButtonItem = rightNavBarButton
+        print(currentGradesHTML)
         super.viewDidLoad()
-        //setUpCurrentGradesHTML()
-            self.view.addSubview(self.containerView)
         
+            self.view.addSubview(self.containerView)
+        //GradesLoadingOverlay.shared.showOverlay(view: self.containerView)
+        //UserDefaults.standard.set("Blah", forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)currentGrades")
         print("Hello")
         
         do {
@@ -184,9 +186,45 @@ class gradesVC: UIViewController {
         
         
             self.display(html: self.currentGradesHTML)
-        
+        viewDidAppearQueue.append {
+            GradesLoadingOverlay.shared.showOverlay(view: self.containerView)
+            var mp = self.MPButton.title!
+            var array = Array(mp)
+            array.remove(at: 0)
+            array.remove(at: 0)
+            mp = String(array)
+            self.getNewHTMl(mp: mp, isRefresh: true) {
+                response in
+                
+                for button in self.arrayOfButtons {
+                    button.removeFromSuperview()
+                }
+                self.arrayOfButtons.removeAll()
+                self.arrayOfClassNames.removeAll()
+                self.arrayOfGrades.removeAll()
+                self.dict.removeAll()
+                for label in self.arrayOfLabels {
+                    label.removeFromSuperview()
+                }
+                self.arrayOfLabels.removeAll()
+                self.ypos = 0.0
+                self.contentViewSize.height = self.getScrollHeight(HTML: response) + 100
+                self.scrollView.contentSize = self.contentViewSize
+                self.containerView.frame.size = self.contentViewSize
+                self.display(html: response)
+     
+                GradesLoadingOverlay.shared.hideOverlayView()
+                
+            }
+        }
         
    
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        while !viewDidAppearQueue.isEmpty {
+               viewDidAppearQueue.removeFirst()()
+           }
+        
     }
     func getScrollHeight(HTML: String) -> CGFloat {
         if HTML == "" {
@@ -506,7 +544,7 @@ class gradesVC: UIViewController {
             }
             
         }
-        if mp == currentMP {
+        else if mp == currentMP {
             completion(currentGradesHTML)
         }
         else if UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))MP:\(mp)") != nil {
@@ -569,6 +607,46 @@ class gradesVC: UIViewController {
 
         }
 
+}
+public class GradesLoadingOverlay {
+
+var overlayView = UIView()
+var activityIndicator = UIActivityIndicatorView()
+
+class var shared: GradesLoadingOverlay {
+    struct Static {
+        static let instance: GradesLoadingOverlay = GradesLoadingOverlay()
+    }
+    return Static.instance
+}
+
+    public func showOverlay(view: UIView) {
+
+        overlayView.frame = CGRect(x: 0, y:0, width:80, height: 40)
+        overlayView.center.x = view.center.x
+        overlayView.backgroundColor = UIColor(white: 0x444444, alpha: 0.7)
+        overlayView.clipsToBounds = true
+        overlayView.layer.cornerRadius = 10
+        overlayView.backgroundColor = .white
+        
+        
+        print("Hellllo")
+        activityIndicator.backgroundColor = .white
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        //activityIndicator.style = .whiteLarge
+        activityIndicator.center = CGPoint(x: overlayView.bounds.width / 2, y: overlayView.bounds.height / 2)
+
+        overlayView.addSubview(activityIndicator)
+         
+        view.addSubview(overlayView)
+
+        activityIndicator.startAnimating()
+    }
+
+    public func hideOverlayView() {
+        activityIndicator.stopAnimating()
+        overlayView.removeFromSuperview()
+    }
 }
 
 

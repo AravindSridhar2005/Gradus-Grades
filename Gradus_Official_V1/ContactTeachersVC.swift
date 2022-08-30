@@ -86,13 +86,14 @@ class ContactTeachersVC: UIViewController {
 
         @objc func refresh()
         {
-            for button in arrayOfButtons {
-                button.setTitle("", for: .normal)
-            }
+            
             
             getWeekViewHTML(){
                 response in
                 UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)weekview")
+                for button in self.arrayOfButtons {
+                    button.setTitle("", for: .normal)
+                }
                 for button in self.arrayOfButtons {
                     button.removeFromSuperview()
                 }

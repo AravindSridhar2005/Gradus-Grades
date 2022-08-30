@@ -20,7 +20,7 @@ class schedulePopOverVC: UIViewController {
     var classSpecfic = ClassSpecifics(course: "", courseDescription: "", periods: "", teacherName: "", room: "", days: "", markingPeriods: "", buiding: "", status: "")
     override func viewDidLoad() {
         super.viewDidLoad()
-        tempview.layer.cornerRadius = (tempview.frame.height / 3) - 10
+        tempview.layer.cornerRadius = 10
 
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
         TeacherLabel.text = "Teacher: \(classSpecfic.teacherName)"

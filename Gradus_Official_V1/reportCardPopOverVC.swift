@@ -22,7 +22,7 @@ class reportCardPopOverVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        tempview.layer.cornerRadius = (tempview.frame.height / 3) - 10
+        tempview.layer.cornerRadius = 10
 
         teacherLabel.text = "Teacher: \(RCO!.teacher)"
         tardiesLabel.text = "Tardies: \(RCO!.tardies)"

@@ -35,6 +35,15 @@
         "branch" : "master",
         "revision" : "574006f80d7d0d919d0ca5b57f8e318f4c789334"
       }
+    },
+    {
+      "identity" : "transitionbutton",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AladinWay/TransitionButton",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ffd08cbaabb7a896ea63d80a8fa93a2759cacc5c"
+      }
     }
   ],
   "version" : 2

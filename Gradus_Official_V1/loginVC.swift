@@ -8,13 +8,13 @@
 import UIKit
 import Alamofire
 import SwiftSoup
+import TransitionButton
 class loginVC: UIViewController {
 
     @IBOutlet weak var usernameTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
 
-    
-    
+    let button = TransitionButton()
     
     
     override func viewDidLoad() {
@@ -23,6 +23,7 @@ class loginVC: UIViewController {
         super.viewDidLoad()
      
         
+
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -31,11 +32,24 @@ class loginVC: UIViewController {
         //print(UserDefaults.standard.object(forKey: "password") as? String)
     }
     @IBOutlet weak var submitButton: UIButton!
-    
+   
+
     
     @IBAction func submitPressed(_ sender: Any) {
+        //print(submitButton.center.x)
+        submitButton.setTitle("", for: .normal)
+        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        button.center.x = view.center.x
+        button.center.y = view.center.y
+        button.backgroundColor = .link
+        button.layer.cornerRadius = 12
+        view.addSubview(button)
+        button.startAnimation()
+        //LoginLoadingOverlay.shared.showOverlay(view: self.view)
+        self.view.endEditing(true)
+
         print("Hello")
-        submitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "submitPressed"))
+        //submitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "submitPressed"))
         //print(UserDefaults.standard.object(forKey: "username") as? String)
         //when submit button is pressed
         view.endEditing(true)
@@ -59,7 +73,12 @@ class loginVC: UIViewController {
             else if response == false {
                 
             }
+            self.button.stopAnimation()
+            self.button.removeFromSuperview()
+            self.submitButton.setTitle("Submit", for: .normal)
         }
+        
+
     }
     func verify(username: String, password: String, completion: @escaping (Bool) -> Void){
         let url = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOffComplete?loginUrl=https%3A%2F%2Fhac.friscoisd.org%2FHomeAccess%2F")
@@ -88,8 +107,9 @@ class loginVC: UIViewController {
                         if test.count == 1 {
                             
                             completion(false)
+                            
                             var dialogMessage = UIAlertController(title: "Wrong Credentials", message: "Please Enter your correct Username and Password", preferredStyle: .alert)
-                             
+                            self.passwordTF.text?.removeAll()
                              // Create OK button with action handler
                              let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                                  print("Ok button tapped")
@@ -131,5 +151,49 @@ class loginVC: UIViewController {
    
 
 
+}
+
+public class LoginLoadingOverlay {
+
+var overlayView = UIView()
+var activityIndicator = UIActivityIndicatorView()
+
+class var shared: LoginLoadingOverlay {
+    struct Static {
+        static let instance: LoginLoadingOverlay = LoginLoadingOverlay()
+    }
+    return Static.instance
+}
+
+    public func showOverlay(view: UIView, x: Int, y: Int) {
+
+        overlayView.frame = CGRect(x: x, y:y, width:80, height: 40)
+        overlayView.center.x = CGFloat(x)
+        overlayView.center.y = CGFloat(y)
+        overlayView.backgroundColor = UIColor(white: 0x444444, alpha: 0.7)
+        overlayView.clipsToBounds = true
+        overlayView.layer.cornerRadius = 10
+        overlayView.backgroundColor = .black
+        
+        
+        print("Hellllo")
+        activityIndicator.backgroundColor = .black
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        //activityIndicator.style = .whiteLarge
+        activityIndicator.center.x = CGFloat(x)
+        activityIndicator.center.y = CGFloat(y)
+        //activityIndicator.center = CGPoint(x: overlayView.bounds.width / 2, y: overlayView.bounds.height / 2)
+
+        overlayView.addSubview(activityIndicator)
+         
+        view.addSubview(overlayView)
+
+        activityIndicator.startAnimating()
+    }
+
+    public func hideOverlayView() {
+        activityIndicator.stopAnimating()
+        overlayView.removeFromSuperview()
+    }
 }
 

@@ -59,7 +59,7 @@ class gradesSpecficVC: UIViewController {
             if element.cat == "Major Grades" {
                 arrayOfMajorGrades.append(element)
             }
-            if element.cat == "Non-graded" {
+            else if element.cat == "Non-graded" {
                 arrayOfNonGraded.append(element)
             }
             else {

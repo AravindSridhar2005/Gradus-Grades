@@ -9,7 +9,8 @@ import UIKit
 import SwiftSoup
 import Alamofire
 class transcriptVC: UIViewController {
-   
+
+
     var transcriptHTML = UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript") as? String 
     var transcriptYears = [transcriptYear]()
     var testLabel = UILabel()
@@ -33,8 +34,10 @@ class transcriptVC: UIViewController {
         view.frame.size = contentViewSize
         return view
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .white
         view.addSubview(containerView)
         view.addSubview(scrollView)
@@ -48,6 +51,7 @@ class transcriptVC: UIViewController {
         testLabel.font = testLabel.font.withSize(41)
         containerView.addSubview(testLabel)
         setUp(HTML: transcriptHTML as! String)
+        
     }
    
     var refreshControl = UIRefreshControl()
@@ -61,16 +65,17 @@ class transcriptVC: UIViewController {
 
         @objc func refresh()
         {
-            for button in arrayOfButtons {
-                button.setTitle("", for: .normal)
-            }
-            print(arrayOfButtons.count)
-            arrayOfButtons.removeAll()
-            transcriptYears.removeAll()
-            print(arrayOfButtons.count)
-            dict.removeAll()
+            
             getTranscriptHTML(){
                 response in
+                for button in self.arrayOfButtons {
+                    button.removeFromSuperview()
+                }
+                print(self.arrayOfButtons.count)
+                self.arrayOfButtons.removeAll()
+                self.transcriptYears.removeAll()
+                print(self.arrayOfButtons.count)
+                self.dict.removeAll()
                 self.setUp(HTML: response)
                 UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
                 self.refreshControl.endRefreshing()
@@ -79,7 +84,29 @@ class transcriptVC: UIViewController {
             
 
         }
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        GradesLoadingOverlay.shared.showOverlay(view: self.containerView)
+
+        
+        self.getTranscriptHTML(){
+            response in
+            
+            UserDefaults.standard.set(response, forKey: "\(UserDefaults.standard.object(forKey: "username") as! String)transcript")
+            for button in self.arrayOfButtons {
+                button.removeFromSuperview()
+            }
+            self.arrayOfButtons.removeAll()
+            self.transcriptYears.removeAll()
+
+            self.dict.removeAll()
+            self.setUp(HTML: response)
+            GradesLoadingOverlay.shared.hideOverlayView()
+        }
+    }
+    */
     func getTranscriptHTML(completion: @escaping (String) -> Void) {
+        
         let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
         var DemograhpicsHTML:String = ""
         let transcriptURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Transcript.aspx")
@@ -101,6 +128,7 @@ class transcriptVC: UIViewController {
                     let data = String(data: response.data!, encoding: .utf8)
                     do {
                         let verification_doc = try SwiftSoup.parse(data!)
+                        print("LOGIN REQUIRED")
                         completion(try String(contentsOf: transcriptURL!, encoding: .ascii))
                     }
                     catch{
@@ -110,6 +138,7 @@ class transcriptVC: UIViewController {
             }
             else {
                 completion(try String(contentsOf: transcriptURL!, encoding: .ascii))
+                print("NO LOGIN")
             }
         }
         catch {

@@ -22,6 +22,7 @@ class reportCardVC: UIViewController {
         let menu = DropDown()
         if isReportCardThere {
             do {
+                
                 let docRC = try SwiftSoup.parse(reportCardHTML as! String)
                 let mpElements = try docRC.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
 
@@ -53,7 +54,7 @@ class reportCardVC: UIViewController {
                     response in
                     self.ypos = 30.0
                     self.setUp(HTML: response)
-                    self.contentViewSize.height = self.getScrollHeight() + 50
+                    self.contentViewSize.height = self.getScrollHeight(HTML: response) + 50
                     self.scrollView.contentSize = self.contentViewSize
                     self.containerView.frame.size = self.contentViewSize
                     self.readyLabels(mp: title)
@@ -77,7 +78,7 @@ class reportCardVC: UIViewController {
                
     var arrayOfInvsisibleButtons = [UIButton]()
     var arrayOfReportCardClasses = [ReportCardObject]()
-    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: getScrollHeight() + 50)
+    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: getScrollHeight(HTML: reportCardHTML!) + 50)
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
         view.backgroundColor = .white
@@ -94,10 +95,10 @@ class reportCardVC: UIViewController {
         view.frame.size = contentViewSize
         return view
     }()
-    func getScrollHeight() -> CGFloat{
+    func getScrollHeight(HTML: String) -> CGFloat{
         var height = view.frame.height
         do {
-            let docRC = try SwiftSoup.parse(reportCardHTML as! String)
+            let docRC = try SwiftSoup.parse(HTML as! String)
             let rand = try docRC.select("tr.sg-asp-table-data-row")
             height = CGFloat(ypos + (50.0 * 9))
         }
@@ -151,6 +152,141 @@ class reportCardVC: UIViewController {
             setUpHeaderLabels(mp: currentMP)
             setUp(HTML: reportCardHTML ?? "")
             readyLabels(mp: currentMP)
+        }
+    }
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        getHTMLForLoad() {
+            response in
+            do {
+                self.isReportCardThere = true
+                //print(reportCardHTML)
+                let doc = try SwiftSoup.parse(response)
+                let label = try doc.select("#plnMain_lblMessage").text()
+                if label == "This student does not have any Report Cards for this school year." {
+                    self.isReportCardThere = false
+                    self.selectedMPButton.title = ""
+                }
+                
+                if self.isReportCardThere {
+                    self.containerView.removeFromSuperview()
+                    self.scrollView.removeFromSuperview()
+                    self.view.addSubview(self.containerView)
+                    self.view.addSubview(self.scrollView)
+                    self.scrollView.addSubview(self.containerView)
+                    let doc = try SwiftSoup.parse(response)
+                    for button in self.arrayOfInvsisibleButtons {
+                        button.removeFromSuperview()
+                    }
+                    for label in self.arrayOfHeaderLabels {
+                        label.removeFromSuperview()
+                    }
+                    self.arrayOfHeaderLabels.removeAll()
+                    self.arrayOfInvsisibleButtons.removeAll()
+                    for label in self.arrayOfLabels {
+                        label.removeFromSuperview()
+                    }
+                    self.arrayOfLabels.removeAll()
+                    self.arrayOfReportCardClasses.removeAll()
+                    self.ypos = 30.0
+                    self.contentViewSize.height = self.getScrollHeight(HTML: response) + 50
+                    self.scrollView.contentSize = self.contentViewSize
+                    self.containerView.frame.size = self.contentViewSize
+                    
+                    let mpElements = try doc.select("div.sg-content-grid-container").select("#plnMain_ddlRCRuns").select("option")
+                    self.menu.dataSource.removeAll()
+                    self.menu.anchorView = self.selectedMPButton
+
+                    for element in mpElements {
+                        self.menu.dataSource.append(try element.text())
+                        if element.hasAttr("selected") {
+                            self.currentMP = try element.text()
+                            self.selectedMPButton.title = self.currentMP
+                        }
+                    }
+                    self.readyLabels(mp: self.currentMP)
+                    self.setUpHeaderLabels(mp: self.currentMP)
+                    self.setUp(HTML: response)
+                    
+                    
+                   
+                    self.menu.selectionAction = { index, title in
+                        self.selectedMPButton.title = title
+                        for button in self.arrayOfInvsisibleButtons {
+                            button.removeFromSuperview()
+                        }
+                        for label in self.arrayOfHeaderLabels {
+                            label.removeFromSuperview()
+                        }
+                        self.arrayOfHeaderLabels.removeAll()
+                        self.arrayOfInvsisibleButtons.removeAll()
+                        for label in self.arrayOfLabels {
+                            label.removeFromSuperview()
+                        }
+                        self.arrayOfLabels.removeAll()
+                        self.arrayOfReportCardClasses.removeAll()
+                        
+                        self.getNewHTMl(mp: title, isRefresh: false) {
+                            response in
+                            self.ypos = 30.0
+                            self.setUp(HTML: response)
+                            self.contentViewSize.height = self.getScrollHeight(HTML: response) + 50
+                            self.scrollView.contentSize = self.contentViewSize
+                            self.containerView.frame.size = self.contentViewSize
+                            self.readyLabels(mp: title)
+                            self.setUpHeaderLabels(mp: title)
+                        }
+                        
+                    }
+                }
+                
+            }
+            catch {
+                
+            }
+            
+        }
+    }
+     */
+    func getHTMLForLoad(completion: @escaping (String) -> Void) {
+        let Demographics = URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/Registration.aspx")
+        var DemograhpicsHTML:String = ""
+        
+        do {
+            
+            DemograhpicsHTML = try String(contentsOf: Demographics!, encoding: .ascii)
+            let logonDoc = try SwiftSoup.parse(DemograhpicsHTML)
+            //print(DemograhpicsHTML)
+            if try logonDoc.select("[name=__RequestVerificationToken]").count == 1 {
+                //POST REQUEST HERE with USERNAME AND PASSWORD
+                let logonURL = URL(string: "https://hac.friscoisd.org/HomeAccess/Account/LogOn?")
+                var logonHTML:String = ""
+                logonHTML = try String(contentsOf: logonURL!, encoding: .ascii)
+                let logonDoc = try SwiftSoup.parse(logonHTML)
+                let token = try logonDoc.select("[name=__RequestVerificationToken]").val()
+                print(UserDefaults.standard.object(forKey: "username"))
+                print(UserDefaults.standard.object(forKey: "password"))
+                let parametersForLogon = ["LogOnDetails.UserName": UserDefaults.standard.object(forKey: "username") as! String, "LogOnDetails.Password": UserDefaults.standard.object(forKey: "password") as! String, "SCKTY00328510CustomEnabled":"false","SCKTY00436568CustomEnabled":"false","__RequestVerificationToken":token, "Database":"10", "tempUN":"", "tempPW": "", "VerificationOption": "UsernamePassword"]
+                AF.request("https://hac.friscoisd.org/HomeAccess/Account/LogOn?", method: .post, parameters: parametersForLogon, encoding: URLEncoding()).response { response in
+                    let data = String(data: response.data!, encoding: .utf8)
+                    do {
+                        completion(try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx")!, encoding: .ascii))
+                        print("LOGIN REQUIRED")
+                    }
+                    catch{
+                        
+                    }
+                }
+            }
+            else{//GET GRADES FROM MP HERE
+                completion(try String(contentsOf: URL(string: "https://hac.friscoisd.org/HomeAccess/Content/Student/ReportCards.aspx")!, encoding: .ascii))
+                print("NO LOGIN")
+            }
+            
+        }
+        catch {
+            
         }
     }
     func setUpHeaderLabels(mp: String) {
@@ -529,7 +665,7 @@ class reportCardVC: UIViewController {
             
             
         }
-        if mp == currentMP {
+        else if mp == currentMP {
             completion(reportCardHTML!)
         }
         else if UserDefaults.standard.object(forKey: "\(UserDefaults.standard.object(forKey: "username"))RC:\(mp)") != nil {
@@ -558,24 +694,25 @@ class reportCardVC: UIViewController {
         @objc func refresh()
         {
             let mp = selectedMPButton.title
-            for button in self.arrayOfInvsisibleButtons {
-                button.removeFromSuperview()
-            }
-            for label in self.arrayOfHeaderLabels {
-                label.removeFromSuperview()
-            }
-            self.arrayOfHeaderLabels.removeAll()
-            self.arrayOfInvsisibleButtons.removeAll()
-            for label in self.arrayOfLabels {
-                label.removeFromSuperview()
-            }
-            self.arrayOfLabels.removeAll()
-            self.arrayOfReportCardClasses.removeAll()
+            
             self.getNewHTMl(mp: mp!, isRefresh: true) {
                 response in
+                for button in self.arrayOfInvsisibleButtons {
+                    button.removeFromSuperview()
+                }
+                for label in self.arrayOfHeaderLabels {
+                    label.removeFromSuperview()
+                }
+                self.arrayOfHeaderLabels.removeAll()
+                self.arrayOfInvsisibleButtons.removeAll()
+                for label in self.arrayOfLabels {
+                    label.removeFromSuperview()
+                }
+                self.arrayOfLabels.removeAll()
+                self.arrayOfReportCardClasses.removeAll()
                 self.ypos = 30.0
                 self.setUp(HTML: response)
-                self.contentViewSize.height = self.getScrollHeight() + 50
+                self.contentViewSize.height = self.getScrollHeight(HTML: response) + 50
                 self.scrollView.contentSize = self.contentViewSize
                 self.containerView.frame.size = self.contentViewSize
                 self.readyLabels(mp: mp!)
